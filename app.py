@@ -394,6 +394,7 @@ def load_data():
         path = os.path.join(CLEAN_DIR, f)
         if os.path.exists(path):
             df_p = pd.read_csv(path)
+            df_p.columns = df_p.columns.str.lower() # Normalize columns
             break
     
     if not df_p.empty and 'date' in df_p.columns:
@@ -406,6 +407,7 @@ def load_data():
         path = os.path.join(CLEAN_DIR, f)
         if os.path.exists(path):
             df_y = pd.read_csv(path)
+            df_y.columns = df_y.columns.str.lower() # Normalize columns
             break
             
     # 3. Profit Recommendations
@@ -413,10 +415,15 @@ def load_data():
     prof_path = os.path.join(OUT_DIR, "m4_final_recommendations.csv")
     if os.path.exists(prof_path):
         df_prof = pd.read_csv(prof_path)
+        df_prof.columns = df_prof.columns.str.lower() # Normalize columns
     
     # 4. API Prices (Optional)
     api_p = os.path.join(CLEAN_DIR, "mandi_prices_clean.csv")
-    df_api = pd.read_csv(api_p) if os.path.exists(api_p) else pd.DataFrame()
+    if os.path.exists(api_p):
+        df_api = pd.read_csv(api_p)
+        df_api.columns = df_api.columns.str.lower()
+    else:
+        df_api = pd.DataFrame()
     
     return df_p, df_y, df_prof, df_api
 
