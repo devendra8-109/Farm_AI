@@ -1166,7 +1166,7 @@ elif page == "Profit Optimization":
     st.markdown("#### 📋 AI Recommended Crops & Optimized Inputs")
     st.markdown("The following crops are ranked by their **AI-predicted profit** for your current land conditions.")
     
-    state_prof_data = df_profit[df_profit['State'].str.lower() == y_state.lower()].copy()
+    state_prof_data = df_profit[df_profit['state'].str.lower() == y_state.lower()].copy()
     
     if not state_prof_data.empty:
         # We'll calculate dynamic rankings for the top 10 candidates in the state
@@ -1193,7 +1193,7 @@ elif page == "Profit Optimization":
             
             # Fallback to historical yield if ML fails
             if dynamic_yield is None:
-                dynamic_yield = row['Net_Profit'] / 50000 # Rough proxy for display if missing
+                dynamic_yield = row['net_profit'] / 50000 # Rough proxy for display if missing
             
             # B. Get latest price for this crop
             res_crop = resolve_price_crop(crop_name, price_crops_monthly)
@@ -1214,9 +1214,9 @@ elif page == "Profit Optimization":
                 "Crop": crop_name,
                 "Profit": dynamic_profit_ha,
                 "Match": suit_pct,
-                "Fert": row['Fertilizer_kg'],
-                "Labour": row['Labour_hours'],
-                "Seed": row['Seed_rate'],
+                "Fert": row['fertilizer_kg'],
+                "Labour": row['labour_hours'],
+                "Seed": row['seed_rate'],
                 "Yield": dynamic_yield
             })
             
