@@ -351,16 +351,16 @@ def resolve_price_crop(crop_name: str, price_crops: set) -> str:
             return pc
     return low   # fallback – will produce empty df
 
-# 2. PATHS (Flexible for Local vs GitHub)
+# 2. PATHS
 BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "models")
 OUT_DIR   = os.path.join(BASE_DIR, "outputs")
-
-# Check both common naming conventions
-if os.path.exists(os.path.join(BASE_DIR, "clean_data")):
-    CLEAN_DIR = os.path.join(BASE_DIR, "clean_data")
-else:
-    CLEAN_DIR = os.path.join(BASE_DIR, "data", "cleaned")
+# We will check these dynamically in load_data
+POSSIBLE_DATA_DIRS = [
+    os.path.join(BASE_DIR, "clean_data"),
+    os.path.join(BASE_DIR, "data", "cleaned"),
+    os.path.join(BASE_DIR, "data")
+]
 SHAP_DIR  = os.path.join(OUT_DIR, "shap_charts")
 
 # 2. INITIALIZE STATE
@@ -387,43 +387,32 @@ def load_models():
 
 @st.cache_data
 def load_data():
+    # Helper to find file in any possible dir
+    def find_and_read(filenames):
+        for d in POSSIBLE_DATA_DIRS:
+            if not os.path.exists(d): continue
+            for f in filenames:
+                path = os.path.join(d, f)
+                if os.path.exists(path):
+                    df = pd.read_csv(path)
+                    if not df.empty:
+                        df.columns = df.columns.str.lower().str.strip()
+                        return df
+        return pd.DataFrame()
+
     # 1. Monthly Prices
-    p_files = ["mandi_prices_monthly.csv", "mandi_prices_clean.csv", "mandi_prices_cleaned.csv"]
-    df_p = pd.DataFrame()
-    for f in p_files:
-        path = os.path.join(CLEAN_DIR, f)
-        if os.path.exists(path):
-            df_p = pd.read_csv(path)
-            df_p.columns = df_p.columns.str.lower() # Normalize columns
-            break
-    
+    df_p = find_and_read(["mandi_prices_monthly.csv", "mandi_prices_clean.csv", "mandi_prices_cleaned.csv"])
     if not df_p.empty and 'date' in df_p.columns:
         df_p['date'] = pd.to_datetime(df_p['date'])
     
     # 2. Crop Yield
-    y_files = ["crop_yield_clean.csv", "crop_yield_cleaned.csv", "crop_yield.csv"]
-    df_y = pd.DataFrame()
-    for f in y_files:
-        path = os.path.join(CLEAN_DIR, f)
-        if os.path.exists(path):
-            df_y = pd.read_csv(path)
-            df_y.columns = df_y.columns.str.lower() # Normalize columns
-            break
+    df_y = find_and_read(["crop_yield_clean.csv", "crop_yield_cleaned.csv", "crop_yield.csv"])
             
     # 3. Profit Recommendations
-    df_prof = pd.DataFrame()
-    prof_path = os.path.join(OUT_DIR, "m4_final_recommendations.csv")
-    if os.path.exists(prof_path):
-        df_prof = pd.read_csv(prof_path)
-        df_prof.columns = df_prof.columns.str.lower() # Normalize columns
+    df_prof = find_and_read(["m4_final_recommendations.csv"])
     
     # 4. API Prices (Optional)
-    api_p = os.path.join(CLEAN_DIR, "mandi_prices_clean.csv")
-    if os.path.exists(api_p):
-        df_api = pd.read_csv(api_p)
-        df_api.columns = df_api.columns.str.lower()
-    else:
-        df_api = pd.DataFrame()
+    df_api = find_and_read(["mandi_prices_clean.csv"])
     
     return df_p, df_y, df_prof, df_api
 
