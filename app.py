@@ -494,13 +494,13 @@ def get_best_crop_for_state(state: str) -> str:
     max_area = max(scores.values()) or 1
     area_score = {c: v / max_area for c, v in scores.items()}
 
-    # --- 2. Most profitable: Net_Profit from df_profit ---
-    state_prof = df_profit[df_profit["State"].str.lower() == state.lower()]
-    max_profit = state_prof["Net_Profit"].max() if not state_prof.empty else 1
+    # --- 2. Most profitable: net_profit from df_profit ---
+    state_prof = df_profit[df_profit["state"].str.lower() == state.lower()]
+    max_profit = state_prof["net_profit"].max() if not state_prof.empty else 1
     profit_score = {}
     for crop in state_crops:
-        prof_row = state_prof[state_prof["Crop"].str.lower() == crop.lower()]
-        profit_score[crop.lower()] = float(prof_row.iloc[0]["Net_Profit"]) / (max_profit or 1) \
+        prof_row = state_prof[state_prof["crop"].str.lower() == crop.lower()]
+        profit_score[crop.lower()] = float(prof_row.iloc[0]["net_profit"]) / (max_profit or 1) \
             if not prof_row.empty else 0.0
 
     # --- 3. ML suitability bonus (optional) ---
