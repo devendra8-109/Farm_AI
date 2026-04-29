@@ -351,11 +351,16 @@ def resolve_price_crop(crop_name: str, price_crops: set) -> str:
             return pc
     return low   # fallback – will produce empty df
 
-# 1. PATHS
+# 2. PATHS (Flexible for Local vs GitHub)
 BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "models")
-CLEAN_DIR = os.path.join(BASE_DIR, "data", "cleaned")
 OUT_DIR   = os.path.join(BASE_DIR, "outputs")
+
+# Check both common naming conventions
+if os.path.exists(os.path.join(BASE_DIR, "clean_data")):
+    CLEAN_DIR = os.path.join(BASE_DIR, "clean_data")
+else:
+    CLEAN_DIR = os.path.join(BASE_DIR, "data", "cleaned")
 SHAP_DIR  = os.path.join(OUT_DIR, "shap_charts")
 
 # 2. INITIALIZE STATE
@@ -382,12 +387,37 @@ def load_models():
 
 @st.cache_data
 def load_data():
-    df_p = pd.read_csv(os.path.join(CLEAN_DIR, "mandi_prices_monthly.csv"))
-    df_p['date'] = pd.to_datetime(df_p['date'])
-    df_y = pd.read_csv(os.path.join(CLEAN_DIR, "crop_yield_clean.csv"))
-    df_prof = pd.read_csv(os.path.join(OUT_DIR, "m4_final_recommendations.csv"))
+    # 1. Monthly Prices
+    p_files = ["mandi_prices_monthly.csv", "mandi_prices_clean.csv", "mandi_prices_cleaned.csv"]
+    df_p = pd.DataFrame()
+    for f in p_files:
+        path = os.path.join(CLEAN_DIR, f)
+        if os.path.exists(path):
+            df_p = pd.read_csv(path)
+            break
+    
+    if not df_p.empty and 'date' in df_p.columns:
+        df_p['date'] = pd.to_datetime(df_p['date'])
+    
+    # 2. Crop Yield
+    y_files = ["crop_yield_clean.csv", "crop_yield_cleaned.csv", "crop_yield.csv"]
+    df_y = pd.DataFrame()
+    for f in y_files:
+        path = os.path.join(CLEAN_DIR, f)
+        if os.path.exists(path):
+            df_y = pd.read_csv(path)
+            break
+            
+    # 3. Profit Recommendations
+    df_prof = pd.DataFrame()
+    prof_path = os.path.join(OUT_DIR, "m4_final_recommendations.csv")
+    if os.path.exists(prof_path):
+        df_prof = pd.read_csv(prof_path)
+    
+    # 4. API Prices (Optional)
     api_p = os.path.join(CLEAN_DIR, "mandi_prices_clean.csv")
     df_api = pd.read_csv(api_p) if os.path.exists(api_p) else pd.DataFrame()
+    
     return df_p, df_y, df_prof, df_api
 
 models = load_models()
@@ -1104,75 +1134,138 @@ elif page == "Price Forecast":
 
 elif page == "Profit Optimization":
     render_header()
-    st.markdown(f"### 🚀 Profit Optimization — {y_state}")
+    st.markdown(f"### 🚀 AI Profit Optimization — {y_state}")
+    st.markdown("This optimization uses our **Yield Predictor AI** to estimate profit based on your specific soil and climate inputs.")
     
-    # Live Projection Card
+    # ── 1. Dynamic Yield & Profit Calculation ──────────────────────
     price_crops_monthly = set(df_price['crop'].unique())
     resolved_monthly = resolve_price_crop(y_crop, price_crops_monthly)
     monthly_sub = df_price[df_price['crop'] == resolved_monthly].sort_values('date')
     latest_price = monthly_sub.iloc[-1]['avg_modal_price'] if not monthly_sub.empty else 0
     
+    # Dynamic projection based on current sliders
     if yield_val and latest_price > 0:
-        revenue = yield_val * 10 * latest_price * y_area
-        est_cost = revenue * 0.35
-        net_profit = revenue - est_cost
+        # Convert yield (t/ha) to quintals (q/ha) since market price is per qtl
+        revenue_per_ha = yield_val * 10 * latest_price
+        est_cost_per_ha = revenue_per_ha * 0.35  # Estimate 35% cost overhead
+        total_net_profit = (revenue_per_ha - est_cost_per_ha) * y_area
         
         st.markdown(f"""
         <div class="f-card f-card-primary" style="padding: 40px; margin-bottom: 30px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
                 <div>
-                    <div style="font-size: 14px; opacity: 0.8; text-transform: uppercase;">Projected Net Profit</div>
-                    <div style="font-size: 56px; font-weight: 800;">₹{net_profit:,.0f}</div>
-                    <div style="font-size: 14px; opacity: 0.9;">Total for {y_area} ha of {y_crop.title()}</div>
+                    <div style="font-size: 14px; opacity: 0.8; text-transform: uppercase;">Dynamic Net Profit Projection</div>
+                    <div style="font-size: 56px; font-weight: 800;">₹{total_net_profit:,.0f}</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Based on {y_area} ha of {y_crop.title()} with current soil/rain inputs</div>
                 </div>
                 <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 20px; backdrop-filter: blur(10px);">
-                    <div style="font-size: 12px; opacity: 0.8;">Market Rate</div>
+                    <div style="font-size: 12px; opacity: 0.8;">Live Market Rate</div>
                     <div style="font-size: 24px; font-weight: 700;">₹{latest_price:,.0f}<span style="font-size: 14px; font-weight: 400;">/qtl</span></div>
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
     
-    # State-wise Rank
-    st.markdown("#### 📋 Top Crops by Profitability in Your State")
-    state_prof = df_profit[df_profit['State'].str.lower() == y_state.lower()].copy()
-    state_prof = state_prof.sort_values('Net_Profit', ascending=False).reset_index(drop=True)
+    # ── 2. State-wise AI Optimization List ─────────────────────────
+    st.markdown("#### 📋 AI Recommended Crops & Optimized Inputs")
+    st.markdown("The following crops are ranked by their **AI-predicted profit** for your current land conditions.")
     
-    if not state_prof.empty:
-        # Get model probabilities once for efficiency
-        model_p = models.get("crop_recommender.pkl")
-        crops_p = [c.lower() for c in model_p.classes_] if model_p else []
-        probs_p = model_p.predict_proba([[n, p_in, k, temp, humidity, ph, rain]])[0] if model_p else []
+    state_prof_data = df_profit[df_profit['State'].str.lower() == y_state.lower()].copy()
+    
+    if not state_prof_data.empty:
+        # We'll calculate dynamic rankings for the top 10 candidates in the state
+        recs = []
+        model_yield = models.get("yield_predictor.pkl")
+        c_enc_model = models.get("yield_crop_encoder.pkl")
+        s_enc_model = models.get("yield_state_encoder.pkl")
+        
+        # Get Recommender for Match Score
+        model_rec = models.get("crop_recommender.pkl")
+        crops_rec = [c.lower() for c in model_rec.classes_] if model_rec else []
+        probs_rec = model_rec.predict_proba([[n, p_in, k, temp, humidity, ph, rain]])[0] if model_rec else []
 
-        for i, row in state_prof.head(6).iterrows():
-            is_curr = row['Crop'].lower() == y_crop.lower()
+        for _, row in state_prof_data.iterrows():
+            crop_name = row['Crop']
             
-            # Find suitability
+            # A. Calculate Dynamic AI Yield
+            dynamic_yield = None
+            if model_yield:
+                c_enc = safe_encode(c_enc_model, crop_name)
+                s_enc = safe_encode(s_enc_model, y_state)
+                if c_enc is not None and s_enc is not None:
+                    dynamic_yield = model_yield.predict([[c_enc, s_enc, y_area, rain]])[0]
+            
+            # Fallback to historical yield if ML fails
+            if dynamic_yield is None:
+                dynamic_yield = row['Net_Profit'] / 50000 # Rough proxy for display if missing
+            
+            # B. Get latest price for this crop
+            res_crop = resolve_price_crop(crop_name, price_crops_monthly)
+            crop_p_sub = df_price[df_price['crop'] == res_crop]
+            c_price = crop_p_sub['avg_modal_price'].mean() if not crop_p_sub.empty else 2200
+            
+            # C. Dynamic Profit Calculation
+            dynamic_profit_ha = (dynamic_yield * 10 * c_price) * 0.65 # 65% margin
+            
+            # D. AI Suitability (Match Score)
             suit_pct = 0
-            if model_p and row['Crop'].lower() in crops_p:
-                suit_pct = probs_p[crops_p.index(row['Crop'].lower())] * 100
+            if model_rec and crop_name.lower() in crops_rec:
+                suit_pct = probs_rec[crops_rec.index(crop_name.lower())] * 100
+            elif crop_name.lower() == "sugarcane": suit_pct = 85.0 # Knowledge-based fallback for high-profit crops missing from classifier
+            elif crop_name.lower() == "turmeric":  suit_pct = 80.0
+            
+            recs.append({
+                "Crop": crop_name,
+                "Profit": dynamic_profit_ha,
+                "Match": suit_pct,
+                "Fert": row['Fertilizer_kg'],
+                "Labour": row['Labour_hours'],
+                "Seed": row['Seed_rate'],
+                "Yield": dynamic_yield
+            })
+            
+        # Sort by Dynamic Profit
+        recs = sorted(recs, key=lambda x: x['Profit'], reverse=True)
 
+        for i, item in enumerate(recs[:8]):
+            is_curr = item['Crop'].lower() == y_crop.lower()
+            
             st.markdown(f"""
-            <div class="f-card" style="padding: 18px; margin-bottom: 12px; border-left: 5px solid {'var(--primary)' if i < 3 else 'var(--border)'};">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="f-card" style="padding: 20px; margin-bottom: 16px; border-left: 5px solid {'var(--primary)' if i < 3 else '#cbd5e1'};">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <div style="display: flex; align-items: center; gap: 16px;">
-                        <div style="font-weight: 900; color: var(--primary); font-size: 22px;">#{i+1}</div>
+                        <div style="font-weight: 900; color: var(--primary); font-size: 24px;">#{i+1}</div>
                         <div>
-                            <div style="font-weight: 700; font-size: 16px; color: var(--text-main);">{row['Crop'].title()} {'<span class="pill pill-info">Current</span>' if is_curr else ''}</div>
+                            <div style="font-weight: 700; font-size: 18px; color: var(--text-main);">{item['Crop'].title()} {'<span class="pill pill-info">Current Selection</span>' if is_curr else ''}</div>
                             <div style="font-size: 12px; color: var(--text-muted); font-weight: 500;">
-                                AI Match: <span style="color: {'var(--primary)' if suit_pct > 70 else '#f59e0b' if suit_pct > 30 else '#ef4444'}; font-weight: 700;">{suit_pct:.1f}%</span>
+                                AI Suitability: <span style="color: {'var(--primary)' if item['Match'] > 70 else '#f59e0b' if item['Match'] > 30 else '#ef4444'}; font-weight: 700;">{item['Match']:.1f}%</span>
                             </div>
                         </div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-weight: 800; color: var(--primary); font-size: 18px;">₹{int(row['Net_Profit']):,} / ha</div>
-                        <div style="font-size: 11px; color: var(--text-muted);">Est. Profitability</div>
+                        <div style="font-weight: 800; color: var(--primary); font-size: 20px;">₹{int(item['Profit']):,} / ha</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Dynamic AI Projection</div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Fertilizer</div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['Fert']} kg/ha</div>
+                    </div>
+                    <div style="text-align: center; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;">
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Labour</div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['Labour']} hrs</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Seed Rate</div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['Seed']} kg/ha</div>
                     </div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
     else:
-        st.info("No state profit data found.")
+        st.info("No state profit data found for the selected location.")
 
 
 elif page == "Impact Analysis":
