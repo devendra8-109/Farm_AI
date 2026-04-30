@@ -1223,7 +1223,7 @@ elif page == "Profit Optimization":
             })
             
         # Sort by Dynamic Profit
-        recs = sorted(recs, key=lambda x: x['Profit'], reverse=True)
+        recs = sorted(recs, key=lambda x: x['profit'], reverse=True)
 
         for i, item in enumerate(recs[:8]):
             is_curr = item['crop'].lower() == y_crop.lower()
