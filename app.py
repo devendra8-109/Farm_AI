@@ -1245,7 +1245,6 @@ elif page == "Profit Optimization":
                         <div style="font-size: 11px; color: var(--text-muted);">Dynamic AI Projection</div>
                     </div>
                 </div>
-                
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9;">
                     <div style="text-align: center;">
                         <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Fertilizer</div>
