@@ -555,7 +555,7 @@ def get_state_crop_comparison(state: str, n: int, p: int, k: int, rain: int):
         prof_row   = state_prof[state_prof["crop"].str.lower() == crop.lower()]
         avg_profit = int(prof_row.iloc[0]["net_profit"]) if not prof_row.empty else 0
         suitability = round(prob_dict.get(crop.lower(), 0) * 100, 1)
-        rows.append({"Crop": crop.title(),
+        rows.append({"crop": crop.title(),
                      "Suitability (%)": suitability,
                      "Avg Yield (t/ha)": avg_yield,
                      "Avg Area (ha)": int(avg_area),
