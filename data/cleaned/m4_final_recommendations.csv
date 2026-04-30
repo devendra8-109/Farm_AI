@@ -1,0 +1,996 @@
+state,crop,fertilizer_kg,labour_hours,seed_rate,net_profit,price_source
+Andhra Pradesh,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Andhra Pradesh,BLACK PEPPER,250.0,5.0,5.0,1605612.45,National Avg
+Andhra Pradesh,DRY CHILLIES,250.0,5.0,5.0,518622.71,State Market
+Andhra Pradesh,GARLIC,250.0,5.0,5.0,232499.22,National Avg
+Andhra Pradesh,RICE,250.0,5.0,5.0,193620.19,State Market
+Andhra Pradesh,CASTOR SEED,203.2,5.0,5.0,146903.97,State Market
+Andhra Pradesh,GROUNDNUT,243.3,5.0,5.0,136780.3,State Market
+Andhra Pradesh,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Andhra Pradesh,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Andhra Pradesh,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Andhra Pradesh,SUNFLOWER,149.3,5.0,5.0,98097.96,State Market
+Andhra Pradesh,COCONUT,149.0,5.0,5.0,97803.42,National Avg
+Andhra Pradesh,SAFFLOWER,137.0,5.0,5.0,87076.24,National Avg
+Andhra Pradesh,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Andhra Pradesh,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Andhra Pradesh,MAIZE,82.3,5.0,5.0,40307.7,State Market
+Andhra Pradesh,POTATO,81.7,5.0,5.0,37818.55,State Market
+Andhra Pradesh,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Andhra Pradesh,BANANA,78.6,5.0,5.0,35019.13,State Market
+Andhra Pradesh,ONION,67.0,5.0,5.0,24848.3,State Market
+Andhra Pradesh,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,OILSEEDS TOTAL,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,GUAR SEED,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Andhra Pradesh,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Arunachal Pradesh,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Arunachal Pradesh,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Arunachal Pradesh,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Arunachal Pradesh,RICE,250.0,5.0,5.0,158828.64,National Avg
+Arunachal Pradesh,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Arunachal Pradesh,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Arunachal Pradesh,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Arunachal Pradesh,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Arunachal Pradesh,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Arunachal Pradesh,POTATO,67.9,5.0,5.0,25627.21,National Avg
+Arunachal Pradesh,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Arunachal Pradesh,OILSEEDS TOTAL,65.7,5.0,5.0,23679.41,Estimated
+Assam,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Assam,BLACK PEPPER,250.0,5.0,5.0,1605612.45,National Avg
+Assam,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Assam,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Assam,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Assam,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Assam,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Assam,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Assam,RICE,250.0,5.0,5.0,116360.18,State Market
+Assam,COCONUT,149.0,5.0,5.0,97803.42,National Avg
+Assam,BANANA,116.8,5.0,5.0,68957.8,National Avg
+Assam,WHEAT,144.3,5.0,5.0,66784.34,State Market
+Assam,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Assam,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Assam,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Assam,ONION,72.1,5.0,5.0,29348.95,State Market
+Assam,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+Assam,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Assam,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Assam,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Assam,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Assam,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Assam,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Assam,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Assam,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Assam,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Assam,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Assam,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Assam,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Assam,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Assam,POTATO,47.9,5.0,5.0,8217.4,State Market
+Assam,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Bihar,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Bihar,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Bihar,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Bihar,GARLIC,250.0,5.0,5.0,232499.22,National Avg
+Bihar,RICE,250.0,5.0,5.0,158828.64,National Avg
+Bihar,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Bihar,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Bihar,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Bihar,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Bihar,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Bihar,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Bihar,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Bihar,WHEAT,182.0,5.0,5.0,95170.6,State Market
+Bihar,SAFFLOWER,137.0,5.0,5.0,87076.24,National Avg
+Bihar,ONION,107.1,5.0,5.0,60279.8,State Market
+Bihar,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Bihar,BANANA,80.7,5.0,5.0,36866.48,State Market
+Bihar,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Bihar,POTATO,66.9,5.0,5.0,24746.45,State Market
+Bihar,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Bihar,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Bihar,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Bihar,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Bihar,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Bihar,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Bihar,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Bihar,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Bihar,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Bihar,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Bihar,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Bihar,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Bihar,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Bihar,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Bihar,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Bihar,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Bihar,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Bihar,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Bihar,KHESARI,65.7,5.0,5.0,23679.41,Estimated
+Bihar,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Bihar,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Bihar,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Bihar,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Chhattisgarh,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Chhattisgarh,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Chhattisgarh,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Chhattisgarh,GARLIC,250.0,5.0,5.0,232499.22,National Avg
+Chhattisgarh,RICE,250.0,5.0,5.0,158828.64,National Avg
+Chhattisgarh,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Chhattisgarh,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Chhattisgarh,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Chhattisgarh,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Chhattisgarh,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Chhattisgarh,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Chhattisgarh,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Chhattisgarh,COCONUT,149.0,5.0,5.0,97803.42,National Avg
+Chhattisgarh,SAFFLOWER,137.0,5.0,5.0,87076.24,National Avg
+Chhattisgarh,WHEAT,145.1,5.0,5.0,67372.09,State Market
+Chhattisgarh,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Chhattisgarh,ONION,88.2,5.0,5.0,43532.5,State Market
+Chhattisgarh,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Chhattisgarh,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,KHESARI,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,GUAR SEED,65.7,5.0,5.0,23679.41,Estimated
+Chhattisgarh,POTATO,64.9,5.0,5.0,22968.61,State Market
+Chhattisgarh,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Delhi,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Delhi,RICE,250.0,5.0,5.0,283627.73,State Market
+Delhi,WHEAT,148.5,5.0,5.0,69937.09,State Market
+Delhi,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Delhi,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Delhi,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Delhi,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Delhi,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Delhi,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Delhi,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Delhi,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Delhi,POTATO,46.1,5.0,5.0,6672.15,State Market
+Delhi,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Goa,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Goa,BLACK PEPPER,250.0,5.0,5.0,1605612.45,National Avg
+Goa,RICE,250.0,5.0,5.0,158828.64,National Avg
+Goa,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Goa,COCONUT,149.0,5.0,5.0,97803.42,National Avg
+Goa,BANANA,116.8,5.0,5.0,68957.8,National Avg
+Goa,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Goa,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+Goa,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Goa,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Goa,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Goa,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Goa,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Gujarat,DRY CHILLIES,250.0,5.0,5.0,570259.06,State Market
+Gujarat,RICE,250.0,5.0,5.0,229098.52,State Market
+Gujarat,GARLIC,250.0,5.0,5.0,217817.27,State Market
+Gujarat,CASTOR SEED,198.9,5.0,5.0,143015.71,State Market
+Gujarat,GROUNDNUT,235.5,5.0,5.0,130894.8,State Market
+Gujarat,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Gujarat,SOYABEAN,144.5,5.0,5.0,93778.08,State Market
+Gujarat,WHEAT,151.1,5.0,5.0,71880.26,State Market
+Gujarat,MAIZE,86.0,5.0,5.0,43588.48,State Market
+Gujarat,BANANA,75.8,5.0,5.0,32549.68,State Market
+Gujarat,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Gujarat,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,MOTH,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,OILSEEDS TOTAL,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,GUAR SEED,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Gujarat,ONION,59.7,5.0,5.0,18476.8,State Market
+Gujarat,POTATO,56.1,5.0,5.0,15281.89,State Market
+Gujarat,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Haryana,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Haryana,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Haryana,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Haryana,GARLIC,250.0,5.0,5.0,215824.63,State Market
+Haryana,RICE,250.0,5.0,5.0,158828.64,National Avg
+Haryana,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Haryana,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Haryana,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Haryana,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Haryana,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Haryana,SUNFLOWER,147.3,5.0,5.0,96327.61,State Market
+Haryana,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Haryana,BANANA,84.4,5.0,5.0,40178.3,State Market
+Haryana,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Haryana,ONION,67.0,5.0,5.0,24866.34,State Market
+Haryana,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Haryana,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Haryana,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Haryana,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Haryana,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Haryana,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Haryana,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Haryana,MOTH,65.7,5.0,5.0,23679.41,Estimated
+Haryana,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Haryana,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Haryana,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Haryana,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Haryana,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Haryana,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Haryana,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Haryana,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Haryana,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Haryana,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Haryana,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Haryana,GUAR SEED,65.7,5.0,5.0,23679.41,Estimated
+Haryana,MAIZE,59.0,5.0,5.0,19849.82,State Market
+Haryana,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Haryana,POTATO,38.8,5.0,5.0,292.47,State Market
+Himachal Pradesh,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Himachal Pradesh,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Himachal Pradesh,GARLIC,250.0,5.0,5.0,307451.87,State Market
+Himachal Pradesh,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Himachal Pradesh,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Himachal Pradesh,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Himachal Pradesh,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Himachal Pradesh,RICE,250.0,5.0,5.0,119566.94,State Market
+Himachal Pradesh,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Himachal Pradesh,WHEAT,138.7,5.0,5.0,62600.47,State Market
+Himachal Pradesh,ONION,90.4,5.0,5.0,45452.23,State Market
+Himachal Pradesh,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Himachal Pradesh,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Himachal Pradesh,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,MOTH,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Himachal Pradesh,POTATO,55.3,5.0,5.0,14629.16,State Market
+Himachal Pradesh,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Jammu and Kashmir,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Jammu and Kashmir,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Jammu and Kashmir,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Jammu and Kashmir,GARLIC,250.0,5.0,5.0,211584.99,State Market
+Jammu and Kashmir,RICE,250.0,5.0,5.0,158828.64,National Avg
+Jammu and Kashmir,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Jammu and Kashmir,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Jammu and Kashmir,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Jammu and Kashmir,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Jammu and Kashmir,ONION,94.5,5.0,5.0,49126.93,State Market
+Jammu and Kashmir,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Jammu and Kashmir,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,MOTH,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Jammu and Kashmir,POTATO,59.2,5.0,5.0,18054.46,State Market
+Jammu and Kashmir,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Jharkhand,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Jharkhand,RICE,250.0,5.0,5.0,158828.64,National Avg
+Jharkhand,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Jharkhand,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Jharkhand,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Jharkhand,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Jharkhand,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Jharkhand,SAFFLOWER,137.0,5.0,5.0,87076.24,National Avg
+Jharkhand,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Jharkhand,ONION,88.8,5.0,5.0,44014.98,National Avg
+Jharkhand,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Jharkhand,POTATO,67.9,5.0,5.0,25627.21,National Avg
+Jharkhand,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Jharkhand,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Karnataka,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Karnataka,BLACK PEPPER,250.0,5.0,5.0,1556234.24,State Market
+Karnataka,DRY CHILLIES,250.0,5.0,5.0,596648.31,State Market
+Karnataka,COCONUT,250.0,5.0,5.0,290442.41,State Market
+Karnataka,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Karnataka,GARLIC,250.0,5.0,5.0,230409.02,State Market
+Karnataka,RICE,250.0,5.0,5.0,145336.72,State Market
+Karnataka,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Karnataka,GROUNDNUT,240.9,5.0,5.0,134979.97,State Market
+Karnataka,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Karnataka,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Karnataka,WHEAT,205.5,5.0,5.0,112993.02,State Market
+Karnataka,SOYABEAN,154.4,5.0,5.0,102682.45,State Market
+Karnataka,SUNFLOWER,146.4,5.0,5.0,95457.72,State Market
+Karnataka,SAFFLOWER,131.5,5.0,5.0,82104.17,State Market
+Karnataka,BANANA,100.5,5.0,5.0,54470.39,State Market
+Karnataka,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Karnataka,MAIZE,84.2,5.0,5.0,41981.89,State Market
+Karnataka,POTATO,77.3,5.0,5.0,33924.35,State Market
+Karnataka,ONION,71.3,5.0,5.0,28609.66,State Market
+Karnataka,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,CARDAMOM,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Karnataka,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Karnataka,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Karnataka,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Karnataka,SWEET POTATO,59.0,5.0,5.0,17849.82,State Market
+Karnataka,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Kerala,BLACK PEPPER,250.0,5.0,5.0,1729270.27,State Market
+Kerala,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Kerala,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Kerala,GARLIC,250.0,5.0,5.0,393217.21,State Market
+Kerala,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Kerala,RICE,250.0,5.0,5.0,196764.08,State Market
+Kerala,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Kerala,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Kerala,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Kerala,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Kerala,ONION,146.1,5.0,5.0,95198.25,State Market
+Kerala,BANANA,145.5,5.0,5.0,94632.58,State Market
+Kerala,POTATO,139.3,5.0,5.0,89049.99,State Market
+Kerala,COCONUT,134.0,5.0,5.0,84390.67,State Market
+Kerala,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Kerala,TAPIOCA,100.0,5.0,5.0,53974.04,State Market
+Kerala,SWEET POTATO,89.1,5.0,5.0,44327.82,State Market
+Kerala,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Kerala,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+Kerala,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Kerala,CARDAMOM,65.7,5.0,5.0,23679.41,Estimated
+Kerala,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Kerala,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Kerala,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Kerala,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Kerala,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Kerala,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Kerala,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Kerala,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Kerala,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Kerala,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Kerala,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Kerala,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Kerala,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Kerala,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Kerala,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Kerala,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Madhya Pradesh,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Madhya Pradesh,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Madhya Pradesh,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Madhya Pradesh,GARLIC,244.6,5.0,5.0,184655.67,State Market
+Madhya Pradesh,RICE,250.0,5.0,5.0,158828.64,National Avg
+Madhya Pradesh,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Madhya Pradesh,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Madhya Pradesh,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Madhya Pradesh,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Madhya Pradesh,LINSEED,165.7,5.0,5.0,112859.98,State Market
+Madhya Pradesh,SOYABEAN,160.0,5.0,5.0,107702.6,State Market
+Madhya Pradesh,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Madhya Pradesh,SAFFLOWER,137.0,5.0,5.0,87076.24,National Avg
+Madhya Pradesh,WHEAT,141.3,5.0,5.0,64534.14,State Market
+Madhya Pradesh,MAIZE,77.3,5.0,5.0,35875.44,State Market
+Madhya Pradesh,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Madhya Pradesh,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,KHESARI,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Madhya Pradesh,BANANA,55.7,5.0,5.0,14943.22,State Market
+Madhya Pradesh,ONION,49.8,5.0,5.0,9837.5,State Market
+Madhya Pradesh,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Madhya Pradesh,POTATO,42.8,5.0,5.0,3740.05,State Market
+Maharashtra,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Maharashtra,RICE,250.0,5.0,5.0,151286.25,State Market
+Maharashtra,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Maharashtra,GROUNDNUT,232.0,5.0,5.0,128147.16,State Market
+Maharashtra,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Maharashtra,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Maharashtra,SOYABEAN,158.6,5.0,5.0,106447.63,State Market
+Maharashtra,SUNFLOWER,142.6,5.0,5.0,92089.95,State Market
+Maharashtra,SAFFLOWER,142.6,5.0,5.0,92054.99,State Market
+Maharashtra,WHEAT,154.1,5.0,5.0,74171.28,State Market
+Maharashtra,MAIZE,88.4,5.0,5.0,45726.11,State Market
+Maharashtra,BANANA,66.0,5.0,5.0,23953.18,State Market
+Maharashtra,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,OTHER SUMMER PULSES,65.7,5.0,5.0,23679.41,Estimated
+Maharashtra,ONION,61.6,5.0,5.0,20127.36,State Market
+Maharashtra,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Manipur,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Manipur,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Manipur,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Manipur,RICE,250.0,5.0,5.0,226749.33,State Market
+Manipur,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Manipur,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Manipur,ONION,152.1,5.0,5.0,100574.35,State Market
+Manipur,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Manipur,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Manipur,BANANA,116.8,5.0,5.0,68957.8,National Avg
+Manipur,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Manipur,POTATO,93.6,5.0,5.0,48305.54,State Market
+Manipur,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Manipur,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Manipur,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Manipur,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Manipur,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Manipur,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Manipur,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Manipur,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Manipur,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Manipur,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Manipur,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Manipur,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Manipur,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Manipur,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Manipur,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Manipur,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Meghalaya,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Meghalaya,BLACK PEPPER,250.0,5.0,5.0,1605612.45,National Avg
+Meghalaya,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Meghalaya,BANANA,250.0,5.0,5.0,417631.79,State Market
+Meghalaya,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Meghalaya,GARLIC,250.0,5.0,5.0,232499.22,National Avg
+Meghalaya,RICE,250.0,5.0,5.0,158828.64,National Avg
+Meghalaya,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Meghalaya,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Meghalaya,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Meghalaya,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Meghalaya,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Meghalaya,ONION,124.1,5.0,5.0,75510.46,State Market
+Meghalaya,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Meghalaya,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Meghalaya,POTATO,97.7,5.0,5.0,51917.59,State Market
+Meghalaya,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Meghalaya,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Meghalaya,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Meghalaya,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Mizoram,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Mizoram,RICE,250.0,5.0,5.0,158828.64,National Avg
+Mizoram,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Mizoram,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Mizoram,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Mizoram,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Mizoram,COCONUT,149.0,5.0,5.0,97803.42,National Avg
+Mizoram,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Mizoram,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Mizoram,ONION,88.8,5.0,5.0,44014.98,National Avg
+Mizoram,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Mizoram,POTATO,67.9,5.0,5.0,25627.21,National Avg
+Mizoram,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Mizoram,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Mizoram,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Mizoram,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Mizoram,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Nagaland,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Nagaland,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Nagaland,MAIZE,250.0,5.0,5.0,265783.51,State Market
+Nagaland,RICE,250.0,5.0,5.0,158828.64,National Avg
+Nagaland,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Nagaland,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Nagaland,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Nagaland,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Nagaland,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Nagaland,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Nagaland,POTATO,129.3,5.0,5.0,80172.7,State Market
+Nagaland,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Nagaland,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Nagaland,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Nagaland,TURMERIC,75.7,5.0,5.0,32460.77,State Market
+Nagaland,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Nagaland,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Nagaland,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,CARDAMOM,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Nagaland,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Nagaland,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Odisha,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Odisha,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Odisha,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Odisha,GARLIC,250.0,5.0,5.0,219962.53,State Market
+Odisha,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Odisha,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Odisha,RICE,250.0,5.0,5.0,130761.01,State Market
+Odisha,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Odisha,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Odisha,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Odisha,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Odisha,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Odisha,SAFFLOWER,137.0,5.0,5.0,87076.24,National Avg
+Odisha,WHEAT,148.5,5.0,5.0,69937.09,State Market
+Odisha,SWEET POTATO,81.7,5.0,5.0,37748.74,State Market
+Odisha,ONION,68.7,5.0,5.0,26366.34,State Market
+Odisha,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Odisha,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Odisha,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Odisha,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Odisha,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Odisha,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Odisha,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Odisha,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Odisha,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Odisha,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Odisha,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Odisha,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Odisha,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Odisha,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Odisha,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Odisha,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Odisha,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Odisha,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Odisha,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Odisha,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Odisha,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Odisha,MAIZE,59.0,5.0,5.0,19849.82,State Market
+Odisha,POTATO,59.4,5.0,5.0,18242.41,State Market
+Odisha,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Puducherry,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Puducherry,BLACK PEPPER,250.0,5.0,5.0,1605612.45,National Avg
+Puducherry,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Puducherry,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Puducherry,RICE,250.0,5.0,5.0,158828.64,National Avg
+Puducherry,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Puducherry,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Puducherry,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Puducherry,COCONUT,149.0,5.0,5.0,97803.42,National Avg
+Puducherry,BANANA,116.8,5.0,5.0,68957.8,National Avg
+Puducherry,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Puducherry,ONION,88.8,5.0,5.0,44014.98,National Avg
+Puducherry,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Puducherry,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Puducherry,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,OTHER SUMMER PULSES,65.7,5.0,5.0,23679.41,Estimated
+Puducherry,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Punjab,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Punjab,RICE,250.0,5.0,5.0,158828.64,National Avg
+Punjab,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Punjab,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Punjab,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Punjab,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Punjab,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Punjab,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Punjab,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Punjab,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Punjab,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Punjab,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Punjab,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Punjab,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Punjab,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Punjab,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Punjab,MOTH,65.7,5.0,5.0,23679.41,Estimated
+Punjab,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Punjab,GUAR SEED,65.7,5.0,5.0,23679.41,Estimated
+Punjab,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Punjab,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Punjab,MAIZE,56.4,5.0,5.0,17625.75,State Market
+Punjab,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Sikkim,RICE,250.0,5.0,5.0,158828.64,National Avg
+Sikkim,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Sikkim,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Sikkim,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Sikkim,POTATO,67.9,5.0,5.0,25627.21,National Avg
+Sikkim,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Sikkim,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Sikkim,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Sikkim,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Sikkim,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Sikkim,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Sikkim,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Sikkim,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Tamil Nadu,BLACK PEPPER,250.0,5.0,5.0,1605612.45,National Avg
+Tamil Nadu,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Tamil Nadu,TURMERIC,250.0,5.0,5.0,286859.91,State Market
+Tamil Nadu,GARLIC,250.0,5.0,5.0,232499.22,National Avg
+Tamil Nadu,GROUNDNUT,250.0,5.0,5.0,191610.69,State Market
+Tamil Nadu,ONION,245.2,5.0,5.0,185232.72,State Market
+Tamil Nadu,RICE,250.0,5.0,5.0,158828.64,National Avg
+Tamil Nadu,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Tamil Nadu,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Tamil Nadu,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Tamil Nadu,SUNFLOWER,172.1,5.0,5.0,118645.89,State Market
+Tamil Nadu,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Tamil Nadu,BANANA,119.0,5.0,5.0,70914.97,State Market
+Tamil Nadu,TAPIOCA,100.0,5.0,5.0,53974.04,National Avg
+Tamil Nadu,MAIZE,88.7,5.0,5.0,45996.08,State Market
+Tamil Nadu,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Tamil Nadu,COCONUT,71.8,5.0,5.0,29100.6,State Market
+Tamil Nadu,POTATO,67.9,5.0,5.0,25627.21,National Avg
+Tamil Nadu,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,CARDAMOM,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,GUAR SEED,65.7,5.0,5.0,23679.41,Estimated
+Tamil Nadu,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Telangana,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Telangana,DRY CHILLIES,250.0,5.0,5.0,348949.52,State Market
+Telangana,TURMERIC,250.0,5.0,5.0,277107.87,State Market
+Telangana,GARLIC,250.0,5.0,5.0,195304.75,State Market
+Telangana,RICE,250.0,5.0,5.0,158828.64,National Avg
+Telangana,GROUNDNUT,239.9,5.0,5.0,134266.01,State Market
+Telangana,CASTOR SEED,180.3,5.0,5.0,126099.63,State Market
+Telangana,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Telangana,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Telangana,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Telangana,SOYABEAN,149.1,5.0,5.0,97932.9,State Market
+Telangana,COCONUT,149.0,5.0,5.0,97803.42,National Avg
+Telangana,SAFFLOWER,137.0,5.0,5.0,87076.24,National Avg
+Telangana,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Telangana,BANANA,99.0,5.0,5.0,53095.51,State Market
+Telangana,MAIZE,80.1,5.0,5.0,38358.51,State Market
+Telangana,POTATO,72.1,5.0,5.0,29303.42,State Market
+Telangana,SWEET POTATO,67.6,5.0,5.0,25383.57,State Market
+Telangana,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Telangana,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Telangana,CASHEWNUT,65.7,5.0,5.0,23679.41,Estimated
+Telangana,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Telangana,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Telangana,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Telangana,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Telangana,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Telangana,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Telangana,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Telangana,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Telangana,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Telangana,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Telangana,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Telangana,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Telangana,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Telangana,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Telangana,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Telangana,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Telangana,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Telangana,ONION,50.5,5.0,5.0,10439.59,State Market
+Telangana,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Tripura,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Tripura,RICE,250.0,5.0,5.0,150763.51,State Market
+Tripura,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Tripura,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Tripura,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Tripura,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Tripura,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Tripura,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Tripura,POTATO,72.5,5.0,5.0,29655.41,State Market
+Tripura,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Tripura,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Tripura,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Tripura,MESTA,65.7,5.0,5.0,23679.41,Estimated
+Tripura,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Tripura,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Tripura,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Tripura,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Tripura,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Tripura,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Tripura,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Tripura,COWPEA(LOBIA),65.7,5.0,5.0,23679.41,Estimated
+Tripura,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Tripura,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Tripura,KHESARI,65.7,5.0,5.0,23679.41,Estimated
+Tripura,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Tripura,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Uttar Pradesh,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Uttar Pradesh,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Uttar Pradesh,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Uttar Pradesh,GARLIC,212.6,5.0,5.0,155439.72,State Market
+Uttar Pradesh,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+Uttar Pradesh,TOBACCO,184.6,5.0,5.0,129956.67,State Market
+Uttar Pradesh,JUTE,184.3,5.0,5.0,129722.59,National Avg
+Uttar Pradesh,GROUNDNUT,226.7,5.0,5.0,124129.22,State Market
+Uttar Pradesh,LINSEED,175.7,5.0,5.0,121903.6,State Market
+Uttar Pradesh,RICE,250.0,5.0,5.0,115941.04,State Market
+Uttar Pradesh,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Uttar Pradesh,SOYABEAN,135.7,5.0,5.0,85841.93,State Market
+Uttar Pradesh,WHEAT,142.1,5.0,5.0,65172.38,State Market
+Uttar Pradesh,MAIZE,79.8,5.0,5.0,38068.01,State Market
+Uttar Pradesh,SWEET POTATO,78.7,5.0,5.0,35097.82,National Avg
+Uttar Pradesh,BANANA,78.2,5.0,5.0,34671.03,State Market
+Uttar Pradesh,ONION,67.6,5.0,5.0,25370.41,State Market
+Uttar Pradesh,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,MOTH,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,CORIANDER,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,GINGER,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,GUAR SEED,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Uttar Pradesh,POTATO,44.5,5.0,5.0,5259.68,State Market
+Uttar Pradesh,GRAM,29.0,5.0,5.0,4441.08,Estimated
+Uttarakhand,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+Uttarakhand,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+Uttarakhand,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+Uttarakhand,GARLIC,250.0,5.0,5.0,232499.22,National Avg
+Uttarakhand,RICE,250.0,5.0,5.0,158828.64,National Avg
+Uttarakhand,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+Uttarakhand,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+Uttarakhand,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+Uttarakhand,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+Uttarakhand,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+Uttarakhand,WHEAT,151.5,5.0,5.0,72222.71,National Avg
+Uttarakhand,ONION,88.8,5.0,5.0,44014.98,National Avg
+Uttarakhand,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+Uttarakhand,POTATO,67.9,5.0,5.0,25627.21,National Avg
+Uttarakhand,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,MOTH,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,OTHER CEREALS,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,SESAME,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,MILLET,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,OTHER OILSEEDS,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,OTHER SUMMER PULSES,65.7,5.0,5.0,23679.41,Estimated
+Uttarakhand,GRAM,29.0,5.0,5.0,4441.08,Estimated
+West Bengal,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
+West Bengal,DRY CHILLIES,250.0,5.0,5.0,479855.67,National Avg
+West Bengal,GARLIC,250.0,5.0,5.0,295529.98,State Market
+West Bengal,TURMERIC,250.0,5.0,5.0,243668.75,National Avg
+West Bengal,RICE,250.0,5.0,5.0,157352.26,State Market
+West Bengal,GROUNDNUT,250.0,5.0,5.0,150636.24,National Avg
+West Bengal,CASTOR SEED,195.6,5.0,5.0,139991.12,National Avg
+West Bengal,JUTE,184.3,5.0,5.0,129722.59,State Market
+West Bengal,LINSEED,175.6,5.0,5.0,121822.13,National Avg
+West Bengal,TOBACCO,175.1,5.0,5.0,121400.72,National Avg
+West Bengal,SUNFLOWER,151.5,5.0,5.0,100113.31,National Avg
+West Bengal,SOYABEAN,151.2,5.0,5.0,99820.91,National Avg
+West Bengal,COCONUT,149.0,5.0,5.0,97803.42,National Avg
+West Bengal,SAFFLOWER,137.0,5.0,5.0,87076.24,National Avg
+West Bengal,WHEAT,145.5,5.0,5.0,67692.45,State Market
+West Bengal,MAIZE,86.0,5.0,5.0,43611.2,National Avg
+West Bengal,ARECANUT,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,PIGEONPEA,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,PEARL MILLET,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,BARLEY,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,CARDAMOM,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,COTTON(LINT),65.7,5.0,5.0,23679.41,Estimated
+West Bengal,HORSE-GRAM,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,SORGHUM,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,KHESARI,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,MASOOR,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,MESTA,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,GREENGRAM,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,NIGER SEED,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,OTHER KHARIF PULSES,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,FINGER MILLET,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,RAPESEED &MUSTARD,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,SANNHAMP,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,SESAME,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,MILLET,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,BLACKGRAM,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,GINGER,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,PEAS & BEANS (PULSES),65.7,5.0,5.0,23679.41,Estimated
+West Bengal,OTHER  RABI PULSES,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,MOTH,65.7,5.0,5.0,23679.41,Estimated
+West Bengal,POTATO,54.8,5.0,5.0,14169.7,State Market
+West Bengal,GRAM,29.0,5.0,5.0,4441.08,Estimated

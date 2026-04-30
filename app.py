@@ -399,7 +399,8 @@ def load_data():
                     if not df.empty:
                         df.columns = df.columns.str.lower().str.strip()
                         return df
-        return pd.DataFrame()
+        # Fallback: Return empty DF with expected columns to prevent KeyErrors
+        return pd.DataFrame(columns=["state", "crop", "net_profit", "fertilizer_kg", "labour_hours", "seed_rate", "price_source"])
 
     # 1. Monthly Prices
     df_p = find_and_read(["mandi_prices_monthly.csv", "mandi_prices_clean.csv", "mandi_prices_cleaned.csv"])

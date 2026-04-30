@@ -94,5 +94,5 @@ for state in all_states:
             })
 
 df_final = pd.DataFrame(results).sort_values(['state', 'net_profit'], ascending=[True, False])
-df_final.to_csv(os.path.join(OUT_DIR, "m4_final_recommendations.csv"), index=False)
+df_final.to_csv(os.path.join(CLEAN_DIR, "m4_final_recommendations.csv"), index=False)
 print("Saved comprehensive recommendations with fallbacks.")
