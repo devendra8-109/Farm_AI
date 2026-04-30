@@ -533,7 +533,7 @@ def get_state_crop_comparison(state: str, n: int, p: int, k: int, rain: int):
     """Build comparison DataFrame for all crops in a state, sorted by combined score."""
     s_temp, s_hum, s_ph = get_state_climate(state)
     state_crops_list = sorted(df_yield[df_yield["state"] == state]["crop"].unique())
-    state_prof = df_profit[df_profit["State"].str.lower() == state.lower()]
+    state_prof = df_profit[df_profit["state"].str.lower() == state.lower()]
 
     prob_dict = {}
     if "crop_recommender.pkl" in models:
@@ -550,8 +550,8 @@ def get_state_crop_comparison(state: str, n: int, p: int, k: int, rain: int):
                         (df_yield["state"].str.lower() == state.lower())]
         avg_yield  = round(hist["yield"].mean(), 2)  if not hist.empty and "yield" in hist.columns else 0.0
         avg_area   = round(hist["area"].mean(), 0)   if not hist.empty and "area"  in hist.columns else 0.0
-        prof_row   = state_prof[state_prof["Crop"].str.lower() == crop.lower()]
-        avg_profit = int(prof_row.iloc[0]["Net_Profit"]) if not prof_row.empty else 0
+        prof_row   = state_prof[state_prof["crop"].str.lower() == crop.lower()]
+        avg_profit = int(prof_row.iloc[0]["net_profit"]) if not prof_row.empty else 0
         suitability = round(prob_dict.get(crop.lower(), 0) * 100, 1)
         rows.append({"Crop": crop.title(),
                      "Suitability (%)": suitability,
@@ -903,9 +903,9 @@ if page == "Overview":
         """, unsafe_allow_html=True)
 
     with m4:
-        state_prof = df_profit[df_profit['State'].str.lower() == y_state.lower()]
-        crop_prof  = state_prof[state_prof['Crop'].str.lower() == y_crop.lower()]
-        val_prof   = crop_prof.iloc[0]['Net_Profit'] if not crop_prof.empty else 0
+        state_prof = df_profit[df_profit['state'].str.lower() == y_state.lower()]
+        crop_prof  = state_prof[state_prof['crop'].str.lower() == y_crop.lower()]
+        val_prof   = crop_prof.iloc[0]['net_profit'] if not crop_prof.empty else 0
         st.markdown(f"""
         <div class="f-card f-card-primary" style="height: 220px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
             <div style="font-size: 40px; margin-bottom: 10px;">💰</div>
@@ -996,7 +996,7 @@ if page == "Overview":
         </tr>"""
         
         for idx, row in comp_df.head(5).iterrows():
-            is_selected = row['Crop'].lower() == y_crop.lower()
+            is_selected = row['crop'].lower() == y_crop.lower()
             row_style = "background: #f0fdf4;" if is_selected else ""
             status = '<span class="pill pill-success">Recommended</span>' if idx == 0 else '<span class="pill pill-info">Alternative</span>'
             if is_selected: status = '<span class="pill pill-success" style="background: #15803d; color: white;">Current</span>'
@@ -1004,7 +1004,7 @@ if page == "Overview":
             table_html += f"""
             <tr style="{row_style}">
                 <td style="font-weight: 700;">{idx+1}</td>
-                <td style="font-weight: 600;">{row['Crop']}</td>
+                <td style="font-weight: 600;">{row['crop']}</td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <div style="flex-grow: 1; background: #e2e8f0; height: 6px; border-radius: 3px; overflow: hidden; width: 60px;">
@@ -1181,7 +1181,7 @@ elif page == "Profit Optimization":
         probs_rec = model_rec.predict_proba([[n, p_in, k, temp, humidity, ph, rain]])[0] if model_rec else []
 
         for _, row in state_prof_data.iterrows():
-            crop_name = row['Crop']
+            crop_name = row['crop']
             
             # A. Calculate Dynamic AI Yield
             dynamic_yield = None
@@ -1211,20 +1211,20 @@ elif page == "Profit Optimization":
             elif crop_name.lower() == "turmeric":  suit_pct = 80.0
             
             recs.append({
-                "Crop": crop_name,
-                "Profit": dynamic_profit_ha,
-                "Match": suit_pct,
-                "Fert": row['fertilizer_kg'],
-                "Labour": row['labour_hours'],
-                "Seed": row['seed_rate'],
-                "Yield": dynamic_yield
+                "crop": crop_name,
+                "profit": dynamic_profit_ha,
+                "match": suit_pct,
+                "fert": row['fertilizer_kg'],
+                "labour": row['labour_hours'],
+                "seed": row['seed_rate'],
+                "yield": dynamic_yield
             })
             
         # Sort by Dynamic Profit
         recs = sorted(recs, key=lambda x: x['Profit'], reverse=True)
 
         for i, item in enumerate(recs[:8]):
-            is_curr = item['Crop'].lower() == y_crop.lower()
+            is_curr = item['crop'].lower() == y_crop.lower()
             
             st.markdown(f"""
             <div class="f-card" style="padding: 20px; margin-bottom: 16px; border-left: 5px solid {'var(--primary)' if i < 3 else '#cbd5e1'};">
@@ -1232,14 +1232,14 @@ elif page == "Profit Optimization":
                     <div style="display: flex; align-items: center; gap: 16px;">
                         <div style="font-weight: 900; color: var(--primary); font-size: 24px;">#{i+1}</div>
                         <div>
-                            <div style="font-weight: 700; font-size: 18px; color: var(--text-main);">{item['Crop'].title()} {'<span class="pill pill-info">Current Selection</span>' if is_curr else ''}</div>
+                            <div style="font-weight: 700; font-size: 18px; color: var(--text-main);">{item['crop'].title()} {'<span class="pill pill-info">Current Selection</span>' if is_curr else ''}</div>
                             <div style="font-size: 12px; color: var(--text-muted); font-weight: 500;">
-                                AI Suitability: <span style="color: {'var(--primary)' if item['Match'] > 70 else '#f59e0b' if item['Match'] > 30 else '#ef4444'}; font-weight: 700;">{item['Match']:.1f}%</span>
+                                AI Suitability: <span style="color: {'var(--primary)' if item['match'] > 70 else '#f59e0b' if item['match'] > 30 else '#ef4444'}; font-weight: 700;">{item['match']:.1f}%</span>
                             </div>
                         </div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-weight: 800; color: var(--primary); font-size: 20px;">₹{int(item['Profit']):,} / ha</div>
+                        <div style="font-weight: 800; color: var(--primary); font-size: 20px;">₹{int(item['profit']):,} / ha</div>
                         <div style="font-size: 11px; color: var(--text-muted);">Dynamic AI Projection</div>
                     </div>
                 </div>
@@ -1247,15 +1247,15 @@ elif page == "Profit Optimization":
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9;">
                     <div style="text-align: center;">
                         <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Fertilizer</div>
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['Fert']} kg/ha</div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['fert']} kg/ha</div>
                     </div>
                     <div style="text-align: center; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;">
                         <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Labour</div>
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['Labour']} hrs</div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['labour']} hrs</div>
                     </div>
                     <div style="text-align: center;">
                         <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Seed Rate</div>
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['Seed']} kg/ha</div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 14px;">{item['seed']} kg/ha</div>
                     </div>
                 </div>
             </div>
@@ -1324,7 +1324,7 @@ elif page == "Impact Analysis":
     @st.cache_data
     def get_crop_ideals(crop_name):
         try:
-            df_factors = pd.read_csv("data/cleaned/crop_rec_factors_cleaned.csv")
+            df_factors = pd.read_csv("data/cleaned/crop_rec_factors_clean.csv")
             ideals = df_factors[df_factors['label'].str.lower() == crop_name.lower()].mean(numeric_only=True)
             return ideals.to_dict()
         except: return {}

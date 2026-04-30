@@ -87,12 +87,12 @@ for state in all_states:
             opt_f, opt_l, opt_s = res.x
             net_profit = -res.fun
             results.append({
-                "State": state, "Crop": crop.upper(),
-                "Fertilizer_kg": round(opt_f, 1), "Labour_hours": round(opt_l, 1),
-                "Seed_rate": round(opt_s, 1), "Net_Profit": round(net_profit, 2),
-                "Price_Source": price_source
+                "state": state, "crop": crop.upper(),
+                "fertilizer_kg": round(opt_f, 1), "labour_hours": round(opt_l, 1),
+                "seed_rate": round(opt_s, 1), "net_profit": round(net_profit, 2),
+                "price_source": price_source
             })
 
-df_final = pd.DataFrame(results).sort_values(['State', 'Net_Profit'], ascending=[True, False])
+df_final = pd.DataFrame(results).sort_values(['state', 'net_profit'], ascending=[True, False])
 df_final.to_csv(os.path.join(OUT_DIR, "m4_final_recommendations.csv"), index=False)
 print("Saved comprehensive recommendations with fallbacks.")

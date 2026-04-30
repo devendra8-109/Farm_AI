@@ -1,4 +1,4 @@
-State,Crop,Fertilizer_kg,Labour_hours,Seed_rate,Net_Profit,Price_Source
+state,crop,fertilizer_kg,labour_hours,seed_rate,net_profit,price_source
 Andhra Pradesh,SUGARCANE,250.0,5.0,5.0,1673395.38,Estimated
 Andhra Pradesh,BLACK PEPPER,250.0,5.0,5.0,1605612.45,National Avg
 Andhra Pradesh,DRY CHILLIES,250.0,5.0,5.0,518622.71,State Market
