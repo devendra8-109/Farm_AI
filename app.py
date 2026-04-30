@@ -359,7 +359,8 @@ OUT_DIR   = os.path.join(BASE_DIR, "outputs")
 POSSIBLE_DATA_DIRS = [
     os.path.join(BASE_DIR, "clean_data"),
     os.path.join(BASE_DIR, "data", "cleaned"),
-    os.path.join(BASE_DIR, "data")
+    os.path.join(BASE_DIR, "data"),
+    os.path.join(BASE_DIR, "outputs")
 ]
 SHAP_DIR  = os.path.join(OUT_DIR, "shap_charts")
 
