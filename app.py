@@ -443,6 +443,9 @@ def render_header():
     </div>
     """, unsafe_allow_html=True)
 
+def change_page(new_page):
+    st.session_state.page = new_page
+
 def render_sidebar_nav():
     """Custom sidebar navigation with enhanced buttons."""
     with st.sidebar:
@@ -465,11 +468,9 @@ def render_sidebar_nav():
         
         for name, icon in PAGES:
             is_active = st.session_state.page == name
-            active_class = "nav-btn-active" if is_active else ""
-            if st.button(f"{icon} {name}", key=f"nav_{name}", use_container_width=True, 
-                         type="primary" if is_active else "secondary"):
-                st.session_state.page = name
-                st.rerun()
+            st.button(f"{icon} {name}", key=f"nav_{name}", use_container_width=True, 
+                         type="primary" if is_active else "secondary",
+                         on_click=change_page, args=(name,))
 
 # HELPER FUNCTIONS
 def get_best_crop_for_state(state: str) -> str:
@@ -684,32 +685,53 @@ render_sidebar_nav()
 with st.sidebar:
     st.markdown("---")
     st.subheader("📍 Context")
+    # --- Callbacks for State/Crop Syncing ---
+    def on_state_change():
+        # Update y_state from the temporary widget key
+        new_state = st.session_state.temp_y_state
+        st.session_state.y_state = new_state
+        
+        # Trigger Autofill
+        if new_state != st.session_state._last_autofill_state:
+            defaults = STATE_SOIL_DEFAULTS.get(new_state.lower().strip(), {})
+            if defaults:
+                st.session_state.n    = defaults["n"]
+                st.session_state.p    = defaults["p"]
+                st.session_state.k    = defaults["k"]
+                st.session_state.rain = defaults["rain"]
+            st.session_state._last_autofill_state = new_state
+            st.session_state.y_district = "All Districts"
+            best = get_best_crop_for_state(new_state)
+            # Fetch valid crops for new state
+            sc = sorted(df_yield[df_yield["state"] == new_state]["crop"].unique())
+            st.session_state.y_crop = best if best else (sc[0] if sc else "")
+
+    def on_crop_change():
+        st.session_state.y_crop = st.session_state.temp_y_crop
+
     all_states = sorted(df_yield["state"].unique())
-    y_state = st.selectbox("State", all_states, key="y_state")
+    # Ensure y_state is valid
+    if st.session_state.y_state not in all_states and all_states:
+        st.session_state.y_state = all_states[0]
+    
+    state_idx = all_states.index(st.session_state.y_state) if st.session_state.y_state in all_states else 0
+    y_state = st.selectbox("State", all_states, index=state_idx, key="temp_y_state", on_change=on_state_change)
 
     # Compute valid crops for the selected state
     state_crops = sorted(df_yield[df_yield["state"] == y_state]["crop"].unique())
+    
+    # Ensure y_crop is valid for the current state
+    if st.session_state.y_crop not in state_crops and state_crops:
+        # Check if we need to auto-set the crop (only if last state changed or crop is invalid)
+        if y_state != st.session_state._last_autofill_state:
+            best = get_best_crop_for_state(y_state)
+            st.session_state.y_crop = best if best else state_crops[0]
+        else:
+            st.session_state.y_crop = state_crops[0]
 
-    # Autofill Logic
-    needs_rerun = False
-    if y_state != st.session_state._last_autofill_state:
-        defaults = STATE_SOIL_DEFAULTS.get(y_state.lower().strip(), {})
-        if defaults:
-            st.session_state.n    = defaults["n"]
-            st.session_state.p    = defaults["p"]
-            st.session_state.k    = defaults["k"]
-            st.session_state.rain = defaults["rain"]
-        st.session_state._last_autofill_state = y_state
-        st.session_state.y_district = "All Districts"
-        best = get_best_crop_for_state(y_state)
-        st.session_state.y_crop = best if best else (state_crops[0] if state_crops else "")
-        needs_rerun = True
-    elif st.session_state.y_crop not in state_crops:
-        st.session_state.y_crop = state_crops[0] if state_crops else st.session_state.y_crop
-        needs_rerun = True
-    if needs_rerun: st.rerun()
+    crop_idx = state_crops.index(st.session_state.y_crop) if st.session_state.y_crop in state_crops else 0
+    y_crop = st.selectbox("Crop", state_crops, index=crop_idx, key="temp_y_crop", on_change=on_crop_change)
 
-    y_crop = st.selectbox("Crop", state_crops, key="y_crop")
     y_area = st.number_input("Area (ha)", 1.0, 10000.0, key="y_area")
 
     st.markdown("---")
