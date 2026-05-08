@@ -779,6 +779,7 @@ with st.sidebar:
     # --- Callbacks ---
     def on_state_change():
         st.session_state.y_state = st.session_state.y_state_sel
+        st.session_state.ai_state_sel = st.session_state.y_state_sel # Sync AI Assistant
         # Trigger Autofill
         defaults = STATE_SOIL_DEFAULTS.get(st.session_state.y_state.lower().strip(), {})
         if defaults:
@@ -791,10 +792,14 @@ with st.sidebar:
         # Reset crop for new state
         best = get_best_crop_for_state(st.session_state.y_state)
         sc = sorted(df_yield[df_yield["state"] == st.session_state.y_state]["crop"].unique())
-        st.session_state.y_crop = best if best else (sc[0] if sc else "")
+        new_c = best if best else (sc[0] if sc else "")
+        st.session_state.y_crop = new_c
+        st.session_state.ai_crop_sel = new_c # Sync AI Assistant
+        st.session_state.y_crop_sel = new_c # Sync sidebar crop widget
 
     def on_crop_change():
         st.session_state.y_crop = st.session_state.y_crop_sel
+        st.session_state.ai_crop_sel = st.session_state.y_crop_sel # Sync AI Assistant
 
     def on_soil_type_change():
         stype = st.session_state.y_soil_type_sel
@@ -1210,6 +1215,28 @@ if page == "Overview":
     st.markdown("<br>", unsafe_allow_html=True)
 
 elif page == "AI Assistant":
+    def on_ai_state_change():
+        val = st.session_state.ai_state_sel
+        st.session_state.y_state = val
+        st.session_state.y_state_sel = val # Sync sidebar
+        # Trigger Autofill & Crop Reset
+        defaults = STATE_SOIL_DEFAULTS.get(val.lower().strip(), {})
+        if defaults:
+            st.session_state.n, st.session_state.p, st.session_state.k, st.session_state.rain = defaults["n"], defaults["p"], defaults["k"], defaults["rain"]
+        best = get_best_crop_for_state(val)
+        sc = sorted(df_yield[df_yield["state"] == val]["crop"].unique())
+        new_c = best if best else (sc[0] if sc else "wheat")
+        st.session_state.y_crop = new_c
+        st.session_state.y_crop_sel = new_c # Sync sidebar
+        st.session_state.ai_crop_sel = new_c # Sync self (crop dropdown)
+        st.session_state.pop("chat_history", None)
+
+    def on_ai_crop_change():
+        val = st.session_state.ai_crop_sel
+        st.session_state.y_crop = val
+        st.session_state.y_crop_sel = val # Sync sidebar
+        st.session_state.pop("chat_history", None)
+
     render_header()
 
     # ── PULSE ANIMATION & TITLE ──────────────────────────────────────────────
@@ -1240,36 +1267,26 @@ elif page == "AI Assistant":
     sc1, sc2, sc3 = st.columns([2, 2, 1])
     with sc1:
         st.markdown("<p style='font-size:12px;color:#64748b;font-weight:600;margin-bottom:2px;'>🗺️ Your State</p>", unsafe_allow_html=True)
-        _sel_state = st.selectbox("State", _all_states_ai, index=_state_idx_ai,
-                                  format_func=lambda x: x.title(),
-                                  key="ai_state_sel", label_visibility="collapsed")
-    # Update crop list when state changes (live, no button needed for this)
-    if _sel_state != y_state:
-        st.session_state.y_state = _sel_state
-        _sc2 = sorted(df_yield[df_yield["state"] == _sel_state]["crop"].unique())
-        _best2 = get_best_crop_for_state(_sel_state)
-        st.session_state.y_crop = _best2 if _best2 else (_sc2[0] if _sc2 else "wheat")
-        st.session_state._pending_soil_defaults = STATE_SOIL_DEFAULTS.get(_sel_state.lower().strip(), {})
-        st.session_state.pop("chat_history", None)
-        st.rerun()
+        st.selectbox("State", _all_states_ai, index=_state_idx_ai,
+                     format_func=lambda x: str(x).title(),
+                     key="ai_state_sel", on_change=on_ai_state_change,
+                     label_visibility="collapsed")
 
-    _crops_ai2    = sorted(df_yield[df_yield["state"] == _sel_state]["crop"].unique())
+    _crops_ai2    = sorted(df_yield[df_yield["state"] == y_state]["crop"].unique())
     _crop_idx_ai2 = _crops_ai2.index(y_crop) if y_crop in _crops_ai2 else 0
 
     with sc2:
         st.markdown("<p style='font-size:12px;color:#64748b;font-weight:600;margin-bottom:2px;'>🌾 Your Crop</p>", unsafe_allow_html=True)
-        _sel_crop = st.selectbox("Crop", _crops_ai2, index=_crop_idx_ai2,
-                                 format_func=lambda x: x.title(),
-                                 key="ai_crop_sel", label_visibility="collapsed")
+        st.selectbox("Crop", _crops_ai2, index=_crop_idx_ai2,
+                     format_func=lambda x: str(x).title(),
+                     key="ai_crop_sel", on_change=on_ai_crop_change,
+                     label_visibility="collapsed")
 
     with sc3:
         st.markdown("<p style='font-size:12px;color:transparent;margin-bottom:2px;'>.</p>", unsafe_allow_html=True)
-        _go = st.button("Analyse My Farm →", width='stretch', type="primary")
-
-    if _go:
-        st.session_state.y_crop = _sel_crop
-        st.session_state.pop("chat_history", None)
-        st.rerun()
+        if st.button("Analyse My Farm →", width='stretch', type="primary"):
+            st.session_state.pop("chat_history", None)
+            st.rerun()
 
     st.markdown("<hr style='margin:14px 0 18px 0; border-color:#e2e8f0;'>", unsafe_allow_html=True)
     # ─────────────────────────────────────────────────────────────────────────
