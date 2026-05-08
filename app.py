@@ -615,6 +615,8 @@ def get_state_crop_comparison(state: str, n: int, p: int, k: int, rain: int):
                      "Net Profit (₹K)": round(avg_profit / 1000, 1)})
 
     df_out = pd.DataFrame(rows)
+    if df_out.empty or "Suitability (%)" not in df_out.columns:
+        return df_out
     # If ML gives all zeros, sort by profit then area
     if df_out["Suitability (%)"].max() == 0:
         df_out = df_out.sort_values(["Net Profit (₹K)", "Avg Area (ha)"],
@@ -963,7 +965,7 @@ if page == "Overview":
                 <h2 style="margin: 0; color: white !important;">What should you grow?</h2>
                 <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9) !important; font-size: 16px;">
                     Based on current market trends in <b>{y_state}</b>, we recommend <b>{best_overall.title()}</b> 
-                    for a projected net profit of up to <b>₹{int(get_state_crop_comparison(y_state, n, p_in, k, rain).iloc[0]['Net Profit (₹K)'])}K</b> per hectare.
+                    for a projected net profit of up to <b>₹{int(_comp_df.iloc[0]['Net Profit (₹K)']) if not (_comp_df := get_state_crop_comparison(y_state, n, p_in, k, rain)).empty and 'Net Profit (₹K)' in _comp_df.columns else 0}K</b> per hectare.
                 </p>
             </div>
         </div>
