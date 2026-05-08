@@ -422,11 +422,11 @@ if "p"                not in st.session_state: st.session_state.p               
 if "k"                not in st.session_state: st.session_state.k                = 30
 if "rain"             not in st.session_state: st.session_state.rain             = 500
 if "y_area"           not in st.session_state: st.session_state.y_area           = 1.0
-if "y_state"          not in st.session_state: st.session_state.y_state          = ""
+if "y_state"          not in st.session_state: st.session_state.y_state          = "madhya pradesh"  # sensible default
 if "y_district"       not in st.session_state: st.session_state.y_district       = "All Districts"
-if "y_crop"           not in st.session_state: st.session_state.y_crop           = ""
+if "y_crop"           not in st.session_state: st.session_state.y_crop           = "wheat"           # sensible default
 if "_last_autofill_state" not in st.session_state: st.session_state._last_autofill_state = ""
-if "app_initialized"  not in st.session_state: st.session_state.app_initialized  = False
+if "app_initialized"  not in st.session_state: st.session_state.app_initialized  = True  # skip onboarding on restarts
 
 # 3. LOAD MODELS & DATA
 @st.cache_resource
@@ -646,9 +646,9 @@ def get_state_crop_comparison(state: str, n: int, p: int, k: int, rain: int):
                                     ascending=False).reset_index(drop=True)
     return df_out
 
-# ONE-QUESTION LANDING SCREEN
+# ONE-QUESTION LANDING SCREEN — only shown when explicitly navigated to
 # ─────────────────────────────────────────────────────────────────────────────
-if not st.session_state.app_initialized or st.session_state.page == "Onboarding":
+if st.session_state.page == "Onboarding":
     st.markdown("""
     <style>
         [data-testid="stSidebar"] { display: none !important; }
@@ -1200,27 +1200,29 @@ elif page == "AI Assistant":
     render_header()
 
     # ── INLINE STATE + CROP SELECTORS ────────────────────────────────────────
-    sel_col1, sel_col2, sel_col3 = st.columns([2, 2, 1])
+    st.markdown("""
+    <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+        <span style="font-size:13px; color:#64748b; font-weight:600;">📍 Analysing farm for:</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    sel_col1, sel_col2 = st.columns([1, 1])
 
     _all_states_ai = sorted(df_yield["state"].unique())
     _state_idx_ai  = _all_states_ai.index(y_state) if y_state in _all_states_ai else 0
 
     with sel_col1:
+        st.markdown("<div style='font-size:12px;color:#64748b;font-weight:600;margin-bottom:2px;'>🗺️ State</div>", unsafe_allow_html=True)
         _new_state = st.selectbox(
-            "📍 State",
-            _all_states_ai,
-            index=_state_idx_ai,
+            "State", _all_states_ai, index=_state_idx_ai,
             format_func=lambda x: x.title(),
-            key="ai_state_sel",
-            label_visibility="collapsed"
+            key="ai_state_sel", label_visibility="collapsed"
         )
         if _new_state != y_state:
             st.session_state.y_state = _new_state
             _sc = sorted(df_yield[df_yield["state"] == _new_state]["crop"].unique())
             _best = get_best_crop_for_state(_new_state)
             st.session_state.y_crop = _best if _best else (_sc[0] if _sc else "")
-            # Store soil defaults in a safe key — sidebar will apply on next rerun
-            # (Cannot set st.session_state.n/p/k/rain directly after widgets rendered)
             st.session_state._pending_soil_defaults = STATE_SOIL_DEFAULTS.get(_new_state.lower().strip(), {})
             st.session_state.pop("chat_history", None)
             st.rerun()
@@ -1229,28 +1231,20 @@ elif page == "AI Assistant":
     _crop_idx_ai = _crops_ai.index(y_crop) if y_crop in _crops_ai else 0
 
     with sel_col2:
+        st.markdown("<div style='font-size:12px;color:#64748b;font-weight:600;margin-bottom:2px;'>🌾 Crop</div>", unsafe_allow_html=True)
         _new_crop = st.selectbox(
-            "🌾 Crop",
-            _crops_ai,
-            index=_crop_idx_ai,
+            "Crop", _crops_ai, index=_crop_idx_ai,
             format_func=lambda x: x.title(),
-            key="ai_crop_sel",
-            label_visibility="collapsed"
+            key="ai_crop_sel", label_visibility="collapsed"
         )
         if _new_crop != y_crop:
             st.session_state.y_crop = _new_crop
             st.session_state.pop("chat_history", None)
             st.rerun()
 
-    with sel_col3:
-        st.markdown(f"""
-        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px;
-                    padding:8px 12px; font-size:13px; font-weight:700; color:#15803d;
-                    text-align:center; margin-top:2px;">
-            ✅ {y_state.title()}
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown("<hr style='margin:12px 0; border-color:#e2e8f0;'>", unsafe_allow_html=True)
     # ─────────────────────────────────────────────────────────────────────────
+
 
     # ── RECALCULATE KPIs for current selection ────────────────────────────────
     _state_prof_ai = df_profit[df_profit['state'].str.lower() == y_state.lower()]
