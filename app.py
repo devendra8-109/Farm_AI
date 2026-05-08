@@ -423,8 +423,8 @@ def load_data():
         # Fallback: Return empty DF with expected columns to prevent KeyErrors
         return pd.DataFrame(columns=["state", "crop", "net_profit", "fertilizer_kg", "labour_hours", "seed_rate", "price_source"])
 
-    # 1. Monthly Prices
-    df_p = find_and_read(["mandi_prices_monthly.csv", "mandi_prices_clean.csv", "mandi_prices_cleaned.csv"])
+    # 1. Monthly Prices (Prioritize detailed clean data for district-level insights)
+    df_p = find_and_read(["mandi_prices_clean.csv", "mandi_prices_cleaned.csv", "mandi_prices_monthly.csv"])
     if not df_p.empty and 'date' in df_p.columns:
         df_p['date'] = pd.to_datetime(df_p['date'])
     
@@ -784,7 +784,7 @@ temp, humidity, ph, weather_advice = get_state_climate(y_state)
 
 # Get District if possible
 all_districts = ["All Districts"]
-if not df_price.empty:
+if not df_price.empty and 'district' in df_price.columns:
     dist_list = sorted(df_price[df_price['state'].str.lower() == y_state.lower()]['district'].dropna().unique())
     all_districts.extend([d.title() for d in dist_list])
 
