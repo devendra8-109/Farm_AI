@@ -1199,6 +1199,25 @@ if page == "Overview":
 elif page == "AI Assistant":
     render_header()
 
+    # ── PULSE ANIMATION & TITLE ──────────────────────────────────────────────
+    st.markdown("""
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .pulse-icon {
+            width: 10px; height: 10px; background: #22c55e; border-radius: 50%;
+            display: inline-block; margin-right: 8px; animation: pulse 2s infinite;
+        }
+    </style>
+    <div style="display:flex; align-items:center; margin-bottom:15px;">
+        <div class="pulse-icon"></div>
+        <span style="font-size:14px; font-weight:700; color:#15803d; text-transform:uppercase; letter-spacing:0.5px;">Live Farm Intelligence Active</span>
+    </div>
+    """, unsafe_allow_html=True)
+
     # ── SELECTOR ROW: State | Crop | Analyse Button ───────────────────────────
     _all_states_ai = sorted(df_yield["state"].unique())
     _state_idx_ai  = _all_states_ai.index(y_state) if y_state in _all_states_ai else 0
@@ -1232,9 +1251,9 @@ elif page == "AI Assistant":
 
     with sc3:
         st.markdown("<p style='font-size:12px;color:transparent;margin-bottom:2px;'>.</p>", unsafe_allow_html=True)
-        _go = st.button("🔍 Analyse →", use_container_width=True, type="primary")
+        _go = st.button("Analyse My Farm →", width='stretch', type="primary")
 
-    if _go or _sel_crop != y_crop:
+    if _go:
         st.session_state.y_crop = _sel_crop
         st.session_state.pop("chat_history", None)
         st.rerun()
@@ -1318,17 +1337,17 @@ elif page == "AI Assistant":
     st.markdown("**Quick questions:**")
     qcols = st.columns(2)
     with qcols[0]:
-        if st.button(f"💰 How much profit from {y_crop.title()}?", use_container_width=True):
+        if st.button(f"💰 How much profit from {y_crop.title()}?", width='stretch'):
             st.session_state.chat_history.append({"role": "user", "content": f"How much profit will I make from {y_crop}?"})
             st.rerun()
-        if st.button(f"📈 Is it a good time to sell {y_crop.title()}?", use_container_width=True):
+        if st.button(f"📈 Is it a good time to sell {y_crop.title()}?", width='stretch'):
             st.session_state.chat_history.append({"role": "user", "content": f"Is it a good time to sell {y_crop}?"})
             st.rerun()
     with qcols[1]:
-        if st.button(f"🌾 What should I grow instead?", use_container_width=True):
+        if st.button(f"🌾 What should I grow instead?", width='stretch'):
             st.session_state.chat_history.append({"role": "user", "content": "What crop should I grow?"})
             st.rerun()
-        if st.button(f"🌧️ How will weather affect my crop?", use_container_width=True):
+        if st.button(f"🌧️ How will weather affect my crop?", width='stretch'):
             st.session_state.chat_history.append({"role": "user", "content": "How will weather affect my harvest?"})
             st.rerun()
 
