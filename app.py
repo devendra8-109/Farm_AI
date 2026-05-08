@@ -1360,35 +1360,10 @@ elif page == "AI Assistant":
             {"role": "assistant", "content": f"Namaste! 🙏 I'm your FarmAI Assistant.\n\nI see you're growing **{y_crop.title()}** in **{y_state.title()}**. I can help you with:\n- 💰 **Profit estimates** — How much will you earn this season?\n- 📈 **Sell timing** — Is it a good time to sell now, or wait?\n- 🌾 **Crop advice** — What else should you grow?\n- 🌧️ **Weather impact** — How will rain affect your harvest?\n\nWhat would you like to know?"}
         ]
 
-    for msg in st.session_state.chat_history:
-        st.chat_message(msg["role"]).write(msg["content"])
-
-    # Suggestion chips
-    st.markdown("**Quick questions:**")
-    qcols = st.columns(2)
-    with qcols[0]:
-        if st.button(f"💰 How much profit from {y_crop.title()}?", width='stretch'):
-            st.session_state.chat_history.append({"role": "user", "content": f"How much profit will I make from {y_crop}?"})
-            st.rerun()
-        if st.button(f"📈 Is it a good time to sell {y_crop.title()}?", width='stretch'):
-            st.session_state.chat_history.append({"role": "user", "content": f"Is it a good time to sell {y_crop}?"})
-            st.rerun()
-    with qcols[1]:
-        if st.button(f"🌾 What should I grow instead?", width='stretch'):
-            st.session_state.chat_history.append({"role": "user", "content": "What crop should I grow?"})
-            st.rerun()
-        if st.button(f"🌧️ How will weather affect my crop?", width='stretch'):
-            st.session_state.chat_history.append({"role": "user", "content": "How will weather affect my harvest?"})
-            st.rerun()
-
-    if prompt := st.chat_input("Ask anything about your farm..."):
-        st.session_state.chat_history.append({"role": "user", "content": prompt})
-        st.chat_message("user").write(prompt)
-
-        # ── INTENT-BASED ASSISTANT LOGIC ─────────────────────────────
-        query = prompt.lower()
+    # ── INTENT-BASED ASSISTANT LOGIC ─────────────────────────────
+    def generate_assistant_response(query):
+        query = query.lower()
         response = ""
-
         # Get real data for responses
         _res_crop = resolve_price_crop(y_crop, price_crops_monthly)
         _price_rows = df_price[df_price['crop'] == _res_crop] if not df_price.empty else pd.DataFrame()
@@ -1463,9 +1438,42 @@ elif page == "AI Assistant":
                 f"- *'What crop should I grow?'*\n"
                 f"- *'How will the rain affect my harvest?'*"
             )
-
         st.session_state.chat_history.append({"role": "assistant", "content": response})
-        st.chat_message("assistant").write(response)
+
+    # Render history
+    for msg in st.session_state.chat_history:
+        st.chat_message(msg["role"]).write(msg["content"])
+
+    # Suggestion chips
+    st.markdown("**Quick questions:**")
+    qcols = st.columns(2)
+    with qcols[0]:
+        if st.button(f"💰 How much profit from {y_crop.title()}?", width='stretch'):
+            q = f"How much profit will I make from {y_crop}?"
+            st.session_state.chat_history.append({"role": "user", "content": q})
+            generate_assistant_response(q)
+            st.rerun()
+        if st.button(f"📈 Is it a good time to sell {y_crop.title()}?", width='stretch'):
+            q = f"Is it a good time to sell {y_crop}?"
+            st.session_state.chat_history.append({"role": "user", "content": q})
+            generate_assistant_response(q)
+            st.rerun()
+    with qcols[1]:
+        if st.button(f"🌾 What should I grow instead?", width='stretch'):
+            q = "What crop should I grow?"
+            st.session_state.chat_history.append({"role": "user", "content": q})
+            generate_assistant_response(q)
+            st.rerun()
+        if st.button(f"🌧️ How will weather affect my crop?", width='stretch'):
+            q = "How will weather affect my harvest?"
+            st.session_state.chat_history.append({"role": "user", "content": q})
+            generate_assistant_response(q)
+            st.rerun()
+
+    if prompt := st.chat_input("Ask anything about your farm..."):
+        st.session_state.chat_history.append({"role": "user", "content": prompt})
+        generate_assistant_response(prompt)
+        st.rerun()
 
 # DELETE THE DUPLICATE BLOCK BELOW ENTIRELY
 elif page == "AI Assistant LEGACY": 
