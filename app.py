@@ -829,7 +829,7 @@ if "yield_predictor.pkl" in models:
         yield_val = models["yield_predictor.pkl"].predict([[c_enc, s_enc, y_area, rain]])[0]
 
 # Fallback: historical average from df_yield for this crop/state
-if yield_val is None:
+if yield_val is None and y_crop and y_state:
     hist_rows = df_yield[
         (df_yield["crop"].str.lower() == y_crop.lower()) &
         (df_yield["state"].str.lower() == y_state.lower())
@@ -1688,7 +1688,8 @@ with st.sidebar:
     st.markdown("---")
     wa_y = yield_val if (yield_val is not None and not isinstance(yield_val, str)) else 0.0
     wa_p = (int(val_prof * y_area)/1000) if ("val_prof" in locals() and not isinstance(val_prof, str)) else 0.0
-    wa_text = f"FarmAI Advice for {y_state}: %0A🌿 Crop: {y_crop.title()}%0A📈 Yield: {wa_y:.2f} t/ha%0A💰 Profit: ₹{wa_p:.1f}K%0ACheck: FarmAI.streamlit.app"
+    wa_c = y_crop.title() if y_crop else "N/A"
+    wa_text = f"FarmAI Advice for {y_state}: %0A🌿 Crop: {wa_c}%0A📈 Yield: {wa_y:.2f} t/ha%0A💰 Profit: ₹{wa_p:.1f}K%0ACheck: FarmAI.streamlit.app"
     st.markdown(f"""
     <a href="https://wa.me/?text={wa_text}" target="_blank" style="text-decoration: none;">
         <div style="background: #25d366; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: 700;">
