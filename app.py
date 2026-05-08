@@ -793,15 +793,6 @@ with st.sidebar:
     y_district = st.selectbox("📍 District / Mandi", all_districts, key="y_district_sel")
     st.session_state.y_district = y_district
 
-    # WhatsApp Sharing
-    wa_text = f"FarmAI Advice for {y_state}: %0A🌿 Recommended Crop: {y_crop.title()}%0A📈 Predicted Yield: {yield_val if 'yield_val' in locals() else 'N/A' :.2f} t/ha%0A💰 Est. Profit: ₹{int(val_prof * y_area)/1000 if 'val_prof' in locals() else 'N/A'}K%0ACheck it out at: FarmAI.streamlit.app"
-    st.markdown(f"""
-    <a href="https://wa.me/?text={wa_text}" target="_blank" style="text-decoration: none;">
-        <div style="background: #25d366; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: 700; margin-top: 10px;">
-            📲 Share on WhatsApp
-        </div>
-    </a>
-    """, unsafe_allow_html=True)
 
 # Yield prediction — ML model first, historical average as fallback
 yield_val = None
@@ -1612,3 +1603,17 @@ Contributing <b>{(impact_val*100):.1f}%</b> to the AI's final decision.
             </div>
         """, unsafe_allow_html=True)
         st.image("https://scikit-learn.org/stable/_images/sphx_glr_plot_permutation_importance_001.png", caption="AI Model Permutation Importance")
+
+# ── 8. WHATSAPP SHARING (Footer) ──────────────────────────
+with st.sidebar:
+    st.markdown("---")
+    wa_y = yield_val if (yield_val is not None and not isinstance(yield_val, str)) else 0.0
+    wa_p = (int(val_prof * y_area)/1000) if ("val_prof" in locals() and not isinstance(val_prof, str)) else 0.0
+    wa_text = f"FarmAI Advice for {y_state}: %0A🌿 Crop: {y_crop.title()}%0A📈 Yield: {wa_y:.2f} t/ha%0A💰 Profit: ₹{wa_p:.1f}K%0ACheck: FarmAI.streamlit.app"
+    st.markdown(f"""
+    <a href="https://wa.me/?text={wa_text}" target="_blank" style="text-decoration: none;">
+        <div style="background: #25d366; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: 700;">
+            📲 Share on WhatsApp
+        </div>
+    </a>
+    """, unsafe_allow_html=True)
