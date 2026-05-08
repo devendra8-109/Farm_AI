@@ -859,7 +859,7 @@ def get_recommendations_full(n, p, k, temp, humidity, ph, rain, state, selected_
     # Find selected crop's rank and confidence in global list
     crop_rank, crop_conf = None, None
     for i, (c, prob) in enumerate(all_sorted):
-        if c.lower() == selected_crop.lower():
+        if selected_crop and c.lower() == selected_crop.lower():
             crop_rank = i + 1
             crop_conf = prob
             break
