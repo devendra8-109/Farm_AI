@@ -280,18 +280,26 @@ def get_state_climate(state: str):
     if state_low in STATE_COORDS:
         lat, lon = STATE_COORDS[state_low]
         try:
-            url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&hourly=relativehumidity_2m"
+            url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&hourly=relativehumidity_2m,precipitation&daily=precipitation_sum&timezone=auto"
             res = requests.get(url, timeout=3)
             if res.status_code == 200:
                 data = res.json()
                 temp = data["current_weather"]["temperature"]
-                # Get first valid humidity reading
                 hum = next((h for h in data["hourly"]["relativehumidity_2m"] if h is not None), fallback_hum)
-                return temp, hum, ph
+                
+                # Check for rain in next 3 days
+                rain_sum = sum(data["daily"]["precipitation_sum"][:3])
+                advice = ""
+                if rain_sum > 15:
+                    advice = f"🌧️ Heavy rain ({rain_sum:.1f}mm) expected in next 3 days. **Delay fertilizer application** to prevent nutrient runoff."
+                elif rain_sum > 2:
+                    advice = f"🌦️ Light rain ({rain_sum:.1f}mm) expected. Good time for natural irrigation."
+                
+                return temp, hum, ph, advice
         except Exception:
             pass
             
-    return fallback_temp, fallback_hum, ph
+    return fallback_temp, fallback_hum, ph, ""
 
 # State-wise typical soil N/P/K (kg/ha) and annual rainfall (mm)
 # Auto-fills sidebar inputs when a new state is selected
@@ -331,6 +339,19 @@ STATE_SOIL_DEFAULTS = {
     "chandigarh":        {"n": 75, "p": 38, "k": 35, "rain": 650},
     "delhi":             {"n": 65, "p": 30, "k": 30, "rain": 600},
 }
+
+# Seasonal Timelines (Indian Agriculture)
+CROP_CALENDAR = {
+    "rice":      {"sow": "June", "harvest": "Nov", "sell_peak": "Jan", "season": "Kharif"},
+    "wheat":     {"sow": "Nov", "harvest": "April", "sell_peak": "June", "season": "Rabi"},
+    "maize":     {"sow": "June", "harvest": "Oct", "sell_peak": "Dec", "season": "Kharif"},
+    "sugarcane": {"sow": "Feb", "harvest": "Jan", "sell_peak": "March", "season": "Annual"},
+    "cotton":    {"sow": "May", "harvest": "Dec", "sell_peak": "Feb", "season": "Kharif"},
+    "gram":      {"sow": "Oct", "harvest": "March", "sell_peak": "May", "season": "Rabi"},
+    "soyabean":  {"sow": "June", "harvest": "Oct", "sell_peak": "Nov", "season": "Kharif"},
+    "mustard":   {"sow": "Oct", "harvest": "March", "sell_peak": "April", "season": "Rabi"},
+}
+DEFAULT_CALENDAR = {"sow": "June", "harvest": "Oct", "sell_peak": "Dec", "season": "Kharif"}
 
 def resolve_price_crop(crop_name: str, price_crops: set) -> str:
     """Return the price-dataset crop name that best matches crop_name."""
@@ -460,6 +481,7 @@ def render_sidebar_nav():
         PAGES = [
             ("Overview", "📊"),
             ("AI Assistant", "🤖"),
+            ("Seasonal Calendar", "🗓️"),
             ("Crop Recommendation", "🌿"),
             ("Yield Prediction", "📈"),
             ("Price Forecast", "💰"),
@@ -742,9 +764,6 @@ with st.sidebar:
     k    = st.slider("Potassium (K)",  0, 205,  key="k")
     rain = st.number_input("Rainfall (mm)", 0, 5000, key="rain")
 
-    if st.button("🔄 Refresh Analytics", type="primary", use_container_width=True):
-        st.rerun()
-
 # 6. SHARED PREDICTIONS
 def safe_encode(le, val):
     """Encode a label safely. Returns None (not 0) if unknown — avoids silent wrong predictions."""
@@ -760,8 +779,29 @@ def safe_encode(le, val):
         return le.transform([match])[0]
     return None  # Truly unknown — caller handles gracefully
 
-# Get state-based climate (fixes hardcoded temp/humidity/ph)
-temp, humidity, ph = get_state_climate(y_state)
+# Get state-based climate (includes weather advice)
+temp, humidity, ph, weather_advice = get_state_climate(y_state)
+
+# Get District if possible
+all_districts = ["All Districts"]
+if not df_price.empty:
+    dist_list = sorted(df_price[df_price['state'].str.lower() == y_state.lower()]['district'].dropna().unique())
+    all_districts.extend([d.title() for d in dist_list])
+
+with st.sidebar:
+    st.markdown("---")
+    y_district = st.selectbox("📍 District / Mandi", all_districts, key="y_district_sel")
+    st.session_state.y_district = y_district
+
+    # WhatsApp Sharing
+    wa_text = f"FarmAI Advice for {y_state}: %0A🌿 Recommended Crop: {y_crop.title()}%0A📈 Predicted Yield: {yield_val if 'yield_val' in locals() else 'N/A' :.2f} t/ha%0A💰 Est. Profit: ₹{int(val_prof * y_area)/1000 if 'val_prof' in locals() else 'N/A'}K%0ACheck it out at: FarmAI.streamlit.app"
+    st.markdown(f"""
+    <a href="https://wa.me/?text={wa_text}" target="_blank" style="text-decoration: none;">
+        <div style="background: #25d366; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: 700; margin-top: 10px;">
+            📲 Share on WhatsApp
+        </div>
+    </a>
+    """, unsafe_allow_html=True)
 
 # Yield prediction — ML model first, historical average as fallback
 yield_val = None
@@ -904,6 +944,14 @@ if page == "Overview":
     """, unsafe_allow_html=True)
 
     st.markdown(f"### 🌾 Dashboard Overview — {y_state}")
+
+    if weather_advice:
+        st.markdown(f"""
+        <div style="background: #fff9db; border-left: 5px solid #fcc419; padding: 15px; border-radius: 10px; margin-bottom: 25px;">
+            <div style="font-weight: 700; color: #856404; font-size: 14px; text-transform: uppercase; margin-bottom: 5px;">Assistant's Weather Advice</div>
+            <div style="font-size: 15px; color: #212529;">{weather_advice}</div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # ── 1. Key Metrics Row ──────────────────────────────────────────
     m1, m2, m3, m4 = st.columns(4)
@@ -1063,6 +1111,62 @@ if page == "Overview":
         st.markdown(table_html, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
+
+elif page == "Seasonal Calendar":
+    render_header()
+    st.markdown(f"### 🗓️ Seasonal Calendar — {y_crop.title()}")
+    st.markdown(f"Plan your agricultural activities based on the natural cycle of **{y_crop.title()}**.")
+    
+    cal = CROP_CALENDAR.get(y_crop.lower(), DEFAULT_CALENDAR)
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    
+    # Simple Visual Timeline
+    st.markdown('<div class="f-card">', unsafe_allow_html=True)
+    cols = st.columns(12)
+    for i, m in enumerate(months):
+        with cols[i]:
+            is_sow = m == cal['sow']
+            is_harv = m == cal['harvest']
+            is_sell = m == cal['sell_peak']
+            
+            bg = "#15803d" if is_sow else "#f59e0b" if is_harv else "#0369a1" if is_sell else "#f8fafc"
+            color = "white" if (is_sow or is_harv or is_sell) else "#64748b"
+            label = "🌱" if is_sow else "🚜" if is_harv else "💰" if is_sell else ""
+            
+            st.markdown(f"""
+            <div style="background: {bg}; color: {color}; height: 80px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; border: 1px solid #e2e8f0;">
+                {m}
+                <div style="font-size: 20px;">{label}</div>
+            </div>
+            """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown(f"""
+        <div class="f-card">
+            <div style="color: var(--primary); font-size: 14px; font-weight: 700; text-transform: uppercase;">Sowing Phase</div>
+            <div style="font-size: 24px; font-weight: 800; margin-top: 5px;">{cal['sow']}</div>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">Best time to plant for optimal germination.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with c2:
+        st.markdown(f"""
+        <div class="f-card">
+            <div style="color: #f59e0b; font-size: 14px; font-weight: 700; text-transform: uppercase;">Harvesting Window</div>
+            <div style="font-size: 24px; font-weight: 800; margin-top: 5px;">{cal['harvest']}</div>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">Expected maturity and collection period.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with c3:
+        st.markdown(f"""
+        <div class="f-card">
+            <div style="color: #0369a1; font-size: 14px; font-weight: 700; text-transform: uppercase;">Market Peak</div>
+            <div style="font-size: 24px; font-weight: 800; margin-top: 5px;">{cal['sell_peak']}</div>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">Historically higher prices in the mandi.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 elif page == "AI Assistant":
     render_header()
