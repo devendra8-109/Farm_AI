@@ -271,35 +271,64 @@ STATE_COORDS = {
     "delhi": (28.70, 77.10)
 }
 
-@st.cache_data(ttl=3600)
-def get_state_climate(state: str):
-    """Return live (temperature, humidity, ph) for a given state, with static fallback."""
+# Typical soil N/P/K by Soil Type
+SOIL_TYPE_PRESETS = {
+    "Select Type":   None,
+    "Black Soil":    {"n": 80,  "p": 50, "k": 40,  "desc": "Rich in nutrients, best for Cotton/Soyabean"},
+    "Alluvial Soil": {"n": 100, "p": 60, "k": 50,  "desc": "Highly fertile, best for Wheat/Rice"},
+    "Red Soil":      {"n": 50,  "p": 30, "k": 60,  "desc": "Good Potassium, needs Nitrogen boost"},
+    "Laterite Soil": {"n": 40,  "p": 20, "k": 30,  "desc": "Acidic, best for Cashews/Tea"},
+    "Sandy Soil":    {"n": 30,  "p": 15, "k": 20,  "desc": "Poor retention, needs heavy organic input"},
+}
+
+# District Coordinates for Hyperlocal Weather (MP Focus)
+DISTRICT_COORDS = {
+    "indore":      (22.7196, 75.8577),
+    "ujjain":      (23.1760, 75.7885),
+    "bhopal":      (23.2599, 77.4126),
+    "hoshangabad": (22.7533, 77.7247),
+    "narmadapuram":(22.7533, 77.7247),
+    "sehore":      (23.2032, 77.0844),
+    "vidisha":     (23.5251, 77.8081),
+    "jabalpur":    (23.1815, 79.9864),
+    "gwalior":     (26.2183, 78.1828),
+    "rewa":        (24.5362, 81.3037),
+    "sagar":       (23.8388, 78.7378),
+}
+
+def get_state_climate(state: str, district: str = "All Districts"):
+    """Fetch real-time climate data (Open-Meteo). Defaults to state avg if district not mapped."""
     state_low = state.lower()
-    fallback_temp, fallback_hum, ph = STATE_CLIMATE.get(state_low, (25, 65, 6.5))
+    dist_low = district.lower()
     
-    if state_low in STATE_COORDS:
-        lat, lon = STATE_COORDS[state_low]
+    # Priority: District coords -> State coords
+    coords = DISTRICT_COORDS.get(dist_low)
+    if not coords:
+        coords = STATE_COORDS.get(state_low)
+    
+    if coords:
+        lat, lon = coords
         try:
             url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&hourly=relativehumidity_2m,precipitation&daily=precipitation_sum&timezone=auto"
             res = requests.get(url, timeout=3)
             if res.status_code == 200:
                 data = res.json()
                 temp = data["current_weather"]["temperature"]
-                hum = next((h for h in data["hourly"]["relativehumidity_2m"] if h is not None), fallback_hum)
+                hum = next((h for h in data["hourly"]["relativehumidity_2m"] if h is not None), 60)
                 
                 # Check for rain in next 3 days
                 rain_sum = sum(data["daily"]["precipitation_sum"][:3])
                 advice = ""
                 if rain_sum > 15:
-                    advice = f"🌧️ Heavy rain ({rain_sum:.1f}mm) expected in next 3 days. **Delay fertilizer application** to prevent nutrient runoff."
+                    advice = f"🌧️ Heavy rain ({rain_sum:.1f}mm) expected in {district if district != 'All Districts' else state}. **Delay fertilizer application**."
                 elif rain_sum > 2:
-                    advice = f"🌦️ Light rain ({rain_sum:.1f}mm) expected. Good time for natural irrigation."
+                    advice = f"🌦️ Light rain ({rain_sum:.1f}mm) expected in {district if district != 'All Districts' else state}. Good for natural irrigation."
                 
-                return temp, hum, ph, advice
+                return temp, hum, 6.5, advice
         except Exception:
             pass
             
-    return fallback_temp, fallback_hum, ph, ""
+    return 28.0, 60.0, 6.5, ""
 
 # State-wise typical soil N/P/K (kg/ha) and annual rainfall (mm)
 # Auto-fills sidebar inputs when a new state is selected
@@ -708,57 +737,63 @@ render_sidebar_nav()
 with st.sidebar:
     st.markdown("---")
     st.subheader("📍 Context")
-    # --- Callbacks for State/Crop Syncing ---
+    
+    # --- Callbacks ---
     def on_state_change():
-        # Update y_state from the temporary widget key
-        new_state = st.session_state.temp_y_state
-        st.session_state.y_state = new_state
-        
+        st.session_state.y_state = st.session_state.y_state_sel
         # Trigger Autofill
-        if new_state != st.session_state._last_autofill_state:
-            defaults = STATE_SOIL_DEFAULTS.get(new_state.lower().strip(), {})
-            if defaults:
-                st.session_state.n    = defaults["n"]
-                st.session_state.p    = defaults["p"]
-                st.session_state.k    = defaults["k"]
-                st.session_state.rain = defaults["rain"]
-            st.session_state._last_autofill_state = new_state
-            st.session_state.y_district = "All Districts"
-            best = get_best_crop_for_state(new_state)
-            # Fetch valid crops for new state
-            sc = sorted(df_yield[df_yield["state"] == new_state]["crop"].unique())
-            st.session_state.y_crop = best if best else (sc[0] if sc else "")
+        defaults = STATE_SOIL_DEFAULTS.get(st.session_state.y_state.lower().strip(), {})
+        if defaults:
+            st.session_state.n    = defaults["n"]
+            st.session_state.p    = defaults["p"]
+            st.session_state.k    = defaults["k"]
+            st.session_state.rain = defaults["rain"]
+        st.session_state._last_autofill_state = st.session_state.y_state
+        st.session_state.y_district = "All Districts"
+        # Reset crop for new state
+        best = get_best_crop_for_state(st.session_state.y_state)
+        sc = sorted(df_yield[df_yield["state"] == st.session_state.y_state]["crop"].unique())
+        st.session_state.y_crop = best if best else (sc[0] if sc else "")
 
     def on_crop_change():
-        st.session_state.y_crop = st.session_state.temp_y_crop
+        st.session_state.y_crop = st.session_state.y_crop_sel
 
-    all_states = sorted(df_yield["state"].unique())
-    # Ensure y_state is valid
-    if st.session_state.y_state not in all_states and all_states:
-        st.session_state.y_state = all_states[0]
+    def on_soil_type_change():
+        stype = st.session_state.y_soil_type_sel
+        if stype != "Select Type":
+            vals = SOIL_TYPE_PRESETS[stype]
+            st.session_state.n = vals["n"]
+            st.session_state.p = vals["p"]
+            st.session_state.k = vals["k"]
+
+    # --- Selectors ---
+    all_states_list = sorted(STATE_COORDS.keys())
+    state_idx = all_states_list.index(st.session_state.y_state) if st.session_state.y_state in all_states_list else 0
+    y_state = st.selectbox("🗺️ Select State", all_states_list, index=state_idx, on_change=on_state_change, key="y_state_sel")
     
-    state_idx = all_states.index(st.session_state.y_state) if st.session_state.y_state in all_states else 0
-    y_state = st.selectbox("State", all_states, index=state_idx, key="temp_y_state", on_change=on_state_change)
-
-    # Compute valid crops for the selected state
     state_crops = sorted(df_yield[df_yield["state"] == y_state]["crop"].unique())
-    
-    # Ensure y_crop is valid for the current state
-    if st.session_state.y_crop not in state_crops and state_crops:
-        # Check if we need to auto-set the crop (only if last state changed or crop is invalid)
-        if y_state != st.session_state._last_autofill_state:
-            best = get_best_crop_for_state(y_state)
-            st.session_state.y_crop = best if best else state_crops[0]
-        else:
-            st.session_state.y_crop = state_crops[0]
-
     crop_idx = state_crops.index(st.session_state.y_crop) if st.session_state.y_crop in state_crops else 0
-    y_crop = st.selectbox("Crop", state_crops, index=crop_idx, key="temp_y_crop", on_change=on_crop_change)
+    y_crop = st.selectbox("🌾 Select Crop", state_crops, index=crop_idx, on_change=on_crop_change, key="y_crop_sel")
 
-    y_area = st.number_input("Area (ha)", 1.0, 10000.0, key="y_area")
+    # District Selection
+    all_districts = ["All Districts"]
+    if not df_price.empty and 'district' in df_price.columns:
+        dist_list = sorted(df_price[df_price['state'].str.lower() == y_state.lower()]['district'].dropna().unique())
+        all_districts.extend([d.title() for d in dist_list])
+    
+    dist_idx = all_districts.index(st.session_state.y_district) if st.session_state.y_district in all_districts else 0
+    y_district = st.selectbox("📍 District / Mandi", all_districts, index=dist_idx, key="y_district_sel")
+    st.session_state.y_district = y_district
+
+    # Soil Presets
+    st.markdown("---")
+    y_soil_type = st.selectbox("🧪 Quick Soil Setup", list(SOIL_TYPE_PRESETS.keys()), on_change=on_soil_type_change, key="y_soil_type_sel")
+    if y_soil_type != "Select Type":
+        st.info(SOIL_TYPE_PRESETS[y_soil_type]["desc"])
 
     st.markdown("---")
-    st.subheader("🧪 Field Inputs")
+    st.subheader("🛠️ Field Parameters")
+    y_area = st.number_input("Area (ha)", 1.0, 10000.0, key="y_area")
     n    = st.slider("Nitrogen (N)",   0, 140,  key="n")
     p_in = st.slider("Phosphorus (P)", 0, 145,  key="p")
     k    = st.slider("Potassium (K)",  0, 205,  key="k")
@@ -779,8 +814,8 @@ def safe_encode(le, val):
         return le.transform([match])[0]
     return None  # Truly unknown — caller handles gracefully
 
-# Get state-based climate (includes weather advice)
-temp, humidity, ph, weather_advice = get_state_climate(y_state)
+# Get state/district based climate
+temp, humidity, ph, weather_advice = get_state_climate(y_state, st.session_state.get("y_district", "All Districts"))
 
 # Get District if possible
 all_districts = ["All Districts"]
