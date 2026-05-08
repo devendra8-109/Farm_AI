@@ -1087,36 +1087,61 @@ elif page == "AI Assistant":
         response = ""
         p_low = prompt.lower()
         
-        if "sell" in p_low:
+        # 1. Identify Crop Mention
+        all_known_crops = set(df_yield['crop'].unique()) | set(df_price['crop'].unique())
+        mentioned_crop = None
+        for c in all_known_crops:
+            if c.lower() in p_low:
+                mentioned_crop = c
+                break
+        
+        target_crop = mentioned_crop if mentioned_crop else y_crop
+        
+        # 2. Intent Detection
+        is_price  = any(k in p_low for k in ["price", "market", "rate", "cost", "value", "pric", "mandi"])
+        is_sell   = any(k in p_low for k in ["sell", "time", "when", "now"])
+        is_grow   = any(k in p_low for k in ["grow", "recommend", "best", "plant", "suitable"])
+        is_impact = any(k in p_low for k in ["why", "reason", "factor", "impact", "driver", "because"])
+        is_profit = any(k in p_low for k in ["profit", "money", "earn", "income"])
+
+        if is_price or is_sell:
             price_crops_a = set(df_price['crop'].unique())
-            res_a = resolve_price_crop(y_crop, price_crops_a)
+            res_a = resolve_price_crop(target_crop, price_crops_a)
             hist_a = df_price[df_price['crop'] == res_a].sort_values('date')
+            
             if not hist_a.empty:
                 latest = hist_a['avg_modal_price'].iloc[-1]
                 avg = hist_a['avg_modal_price'].mean()
-                if latest > avg:
-                    response = f"Current prices for **{y_crop.title()}** are at ₹{latest:,.0f}, which is above the historical average of ₹{avg:,.0f}. It looks like a **strong time to sell**."
+                
+                if is_sell:
+                    if latest > avg:
+                        response = f"Current prices for **{target_crop.title()}** are at ₹{latest:,.0f}, which is above the historical average of ₹{avg:,.0f}. It looks like a **strong time to sell**."
+                    else:
+                        response = f"Prices for **{target_crop.title()}** are currently ₹{latest:,.0f}. They have been higher in the past (average ₹{avg:,.0f}). You might want to wait for a price surge if your storage allows."
                 else:
-                    response = f"Prices are currently ₹{latest:,.0f}. They have been higher in the past (average ₹{avg:,.0f}). You might want to wait for a price surge if your storage allows."
+                    response = f"The latest market price for **{target_crop.title()}** in our database is **₹{latest:,.0f} per quintal**. The historical average is ₹{avg:,.0f}."
             else:
-                response = f"I don't have enough historical price data for {y_crop.title()} to give a definitive selling recommendation, but current market sentiment is steady."
+                response = f"I don't have enough historical price data for **{target_crop.title()}** to give a specific rate, but I can tell you about its yield potential!"
         
-        elif "grow" in p_low or "recommend" in p_low:
+        elif is_grow:
             best_a = get_best_crop_for_state(y_state)
-            response = f"For **{y_state}**, I highly recommend growing **{best_a.title()}**. It currently shows the best balance of yield stability and market profit."
+            response = f"For **{y_state}**, I highly recommend growing **{best_a.title()}**. It currently shows the best balance of yield stability and market profit based on our ML models."
         
-        elif "why" in p_low or "reason" in p_low or "factor" in p_low:
+        elif is_impact:
             labels_a = ["Rainfall", "Humidity", "Potassium (K)", "Phosphorus (P)", "Nitrogen (N)"]
-            response = f"Based on our AI analysis, **{labels_a[0]}** is the biggest factor affecting your **{y_crop.title()}** yield. Optimizing your water management could increase profits by up to 15%."
+            response = f"Based on our AI analysis, **{labels_a[0]}** is the single most important factor affecting your **{target_crop.title()}** yield in this region. Focusing on water management is key."
         
-        elif "profit" in p_low:
+        elif is_profit:
             state_prof_a = df_profit[df_profit['state'].str.lower() == y_state.lower()]
-            crop_prof_a  = state_prof_a[state_prof_a['crop'].str.lower() == y_crop.lower()]
-            val_prof_a   = crop_prof_a.iloc[0]['net_profit'] if not crop_prof_a.empty else 0
-            response = f"Your estimated net profit for **{y_crop.title()}** is approximately **₹{val_prof_a/1000:,.1f}K** per hectare. You can improve this by following the optimized fertilizer rates in the 'Profit Optimization' tab."
+            crop_prof_a  = state_prof_a[state_prof_a['crop'].str.lower() == target_crop.lower()]
+            if not crop_prof_a.empty:
+                val_prof_a = crop_prof_a.iloc[0]['net_profit']
+                response = f"The estimated net profit for **{target_crop.title()}** is approximately **₹{val_prof_a/1000:,.1f}K** per hectare in {y_state}."
+            else:
+                response = f"I don't have exact profit projections for {target_crop.title()} in {y_state}, but typically it is a moderate-to-high value crop."
         
         else:
-            response = "That's a great question. I'm trained on your farm's soil data, local weather, and market prices. Ask me about whether to sell, what to grow, or what factors are driving your yield!"
+            response = "I'm not quite sure how to answer that. Try asking about: 'What is the price of rice?', 'Should I sell my wheat?', or 'What should I grow?'"
 
         with st.chat_message("assistant"):
             st.markdown(response)
