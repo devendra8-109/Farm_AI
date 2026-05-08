@@ -1199,112 +1199,112 @@ if page == "Overview":
 elif page == "AI Assistant":
     render_header()
 
-    # ── INLINE STATE + CROP SELECTORS ────────────────────────────────────────
-    st.markdown("""
-    <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-        <span style="font-size:13px; color:#64748b; font-weight:600;">📍 Analysing farm for:</span>
-    </div>
-    """, unsafe_allow_html=True)
-
-    sel_col1, sel_col2 = st.columns([1, 1])
-
+    # ── SELECTOR ROW: State | Crop | Analyse Button ───────────────────────────
     _all_states_ai = sorted(df_yield["state"].unique())
     _state_idx_ai  = _all_states_ai.index(y_state) if y_state in _all_states_ai else 0
+    _crops_ai      = sorted(df_yield[df_yield["state"] == y_state]["crop"].unique())
+    _crop_idx_ai   = _crops_ai.index(y_crop) if y_crop in _crops_ai else 0
 
-    with sel_col1:
-        st.markdown("<div style='font-size:12px;color:#64748b;font-weight:600;margin-bottom:2px;'>🗺️ State</div>", unsafe_allow_html=True)
-        _new_state = st.selectbox(
-            "State", _all_states_ai, index=_state_idx_ai,
-            format_func=lambda x: x.title(),
-            key="ai_state_sel", label_visibility="collapsed"
-        )
-        if _new_state != y_state:
-            st.session_state.y_state = _new_state
-            _sc = sorted(df_yield[df_yield["state"] == _new_state]["crop"].unique())
-            _best = get_best_crop_for_state(_new_state)
-            st.session_state.y_crop = _best if _best else (_sc[0] if _sc else "")
-            st.session_state._pending_soil_defaults = STATE_SOIL_DEFAULTS.get(_new_state.lower().strip(), {})
-            st.session_state.pop("chat_history", None)
-            st.rerun()
+    sc1, sc2, sc3 = st.columns([2, 2, 1])
+    with sc1:
+        st.markdown("<p style='font-size:12px;color:#64748b;font-weight:600;margin-bottom:2px;'>🗺️ Your State</p>", unsafe_allow_html=True)
+        _sel_state = st.selectbox("State", _all_states_ai, index=_state_idx_ai,
+                                  format_func=lambda x: x.title(),
+                                  key="ai_state_sel", label_visibility="collapsed")
+    # Update crop list when state changes (live, no button needed for this)
+    if _sel_state != y_state:
+        st.session_state.y_state = _sel_state
+        _sc2 = sorted(df_yield[df_yield["state"] == _sel_state]["crop"].unique())
+        _best2 = get_best_crop_for_state(_sel_state)
+        st.session_state.y_crop = _best2 if _best2 else (_sc2[0] if _sc2 else "wheat")
+        st.session_state._pending_soil_defaults = STATE_SOIL_DEFAULTS.get(_sel_state.lower().strip(), {})
+        st.session_state.pop("chat_history", None)
+        st.rerun()
 
-    _crops_ai    = sorted(df_yield[df_yield["state"] == y_state]["crop"].unique())
-    _crop_idx_ai = _crops_ai.index(y_crop) if y_crop in _crops_ai else 0
+    _crops_ai2    = sorted(df_yield[df_yield["state"] == _sel_state]["crop"].unique())
+    _crop_idx_ai2 = _crops_ai2.index(y_crop) if y_crop in _crops_ai2 else 0
 
-    with sel_col2:
-        st.markdown("<div style='font-size:12px;color:#64748b;font-weight:600;margin-bottom:2px;'>🌾 Crop</div>", unsafe_allow_html=True)
-        _new_crop = st.selectbox(
-            "Crop", _crops_ai, index=_crop_idx_ai,
-            format_func=lambda x: x.title(),
-            key="ai_crop_sel", label_visibility="collapsed"
-        )
-        if _new_crop != y_crop:
-            st.session_state.y_crop = _new_crop
-            st.session_state.pop("chat_history", None)
-            st.rerun()
+    with sc2:
+        st.markdown("<p style='font-size:12px;color:#64748b;font-weight:600;margin-bottom:2px;'>🌾 Your Crop</p>", unsafe_allow_html=True)
+        _sel_crop = st.selectbox("Crop", _crops_ai2, index=_crop_idx_ai2,
+                                 format_func=lambda x: x.title(),
+                                 key="ai_crop_sel", label_visibility="collapsed")
 
-    st.markdown("<hr style='margin:12px 0; border-color:#e2e8f0;'>", unsafe_allow_html=True)
+    with sc3:
+        st.markdown("<p style='font-size:12px;color:transparent;margin-bottom:2px;'>.</p>", unsafe_allow_html=True)
+        _go = st.button("🔍 Analyse →", use_container_width=True, type="primary")
+
+    if _go or _sel_crop != y_crop:
+        st.session_state.y_crop = _sel_crop
+        st.session_state.pop("chat_history", None)
+        st.rerun()
+
+    st.markdown("<hr style='margin:14px 0 18px 0; border-color:#e2e8f0;'>", unsafe_allow_html=True)
     # ─────────────────────────────────────────────────────────────────────────
 
-
-    # ── RECALCULATE KPIs for current selection ────────────────────────────────
-    _state_prof_ai = df_profit[df_profit['state'].str.lower() == y_state.lower()]
-    _crop_prof_ai  = _state_prof_ai[_state_prof_ai['crop'].str.lower() == y_crop.lower()]
-    if not _crop_prof_ai.empty:
-        _prof_h = int(_crop_prof_ai.iloc[0]['net_profit'] * y_area / 1000)
-    elif yield_val:
-        _res_c_h = resolve_price_crop(y_crop, price_crops_monthly)
-        _cp_h = df_price[df_price['crop'] == _res_c_h]['avg_modal_price'].mean() if not df_price.empty and _res_c_h else 2000
-        _prof_h = int(yield_val * 10 * _cp_h * 0.65 * y_area / 1000)
-    else:
+    # ── 4 KPI CARDS (with full error protection) ──────────────────────────────
+    try:
+        _state_prof_ai = df_profit[df_profit['state'].str.lower() == y_state.lower()]
+        _crop_prof_ai  = _state_prof_ai[_state_prof_ai['crop'].str.lower() == y_crop.lower()]
+        if not _crop_prof_ai.empty:
+            _prof_h = int(_crop_prof_ai.iloc[0]['net_profit'] * y_area / 1000)
+        elif yield_val:
+            _res_c_h = resolve_price_crop(y_crop, price_crops_monthly)
+            _px_rows = df_price[df_price['crop'] == _res_c_h] if not df_price.empty and _res_c_h else pd.DataFrame()
+            _cp_h    = float(_px_rows['avg_modal_price'].mean()) if not _px_rows.empty else 2000.0
+            _prof_h  = int(yield_val * 10 * _cp_h * 0.65 * y_area / 1000)
+        else:
+            _prof_h = 0
+    except Exception:
         _prof_h = 0
 
-    _cal_home       = CROP_CALENDAR.get(y_crop.lower(), DEFAULT_CALENDAR)
-    _peak_home      = _cal_home['sell_peak']
-    _months_order_h = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-    _curr_m_h       = datetime.now().strftime("%b")
-    _curr_i_h       = _months_order_h.index(_curr_m_h) if _curr_m_h in _months_order_h else 0
-    _peak_i_h       = _months_order_h.index(_peak_home) if _peak_home in _months_order_h else 0
-    _mtp_h          = (_peak_i_h - _curr_i_h) % 12
-    _sell_label     = "Sell Now! ✅" if _mtp_h == 0 else f"Sell in {_mtp_h}m ⏳"
-    _sell_color     = "#15803d" if _mtp_h == 0 else "#f59e0b"
+    try:
+        _cal_home       = CROP_CALENDAR.get(y_crop.lower(), DEFAULT_CALENDAR)
+        _peak_home      = _cal_home['sell_peak']
+        _months_order_h = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+        _curr_m_h       = datetime.now().strftime("%b")
+        _mtp_h          = (_months_order_h.index(_peak_home) - _months_order_h.index(_curr_m_h)) % 12
+        _sell_label     = "Sell Now! ✅" if _mtp_h == 0 else f"Sell in {_mtp_h}m ⏳"
+        _sell_color     = "#15803d" if _mtp_h == 0 else "#f59e0b"
+    except Exception:
+        _peak_home, _sell_label, _sell_color = "N/A", "Check Calendar", "#64748b"
 
-    _res_c_h  = resolve_price_crop(y_crop, price_crops_monthly)
-    _price_h  = int(df_price[df_price['crop'] == _res_c_h]['avg_modal_price'].mean()) if not df_price.empty and _res_c_h and not df_price[df_price['crop'] == _res_c_h].empty else 0
-    _yield_h  = f"{yield_val:.2f}" if yield_val else "N/A"
-    # ─────────────────────────────────────────────────────────────────────────
+    try:
+        _res_c_h  = resolve_price_crop(y_crop, price_crops_monthly)
+        _px2      = df_price[df_price['crop'] == _res_c_h] if not df_price.empty and _res_c_h else pd.DataFrame()
+        _price_h  = int(_px2['avg_modal_price'].mean()) if not _px2.empty else 0
+    except Exception:
+        _price_h = 0
 
-    # ── 4 KPI CARDS ──────────────────────────────────────────────────────────
+    _yield_h = f"{yield_val:.2f}" if yield_val else "N/A"
+
     st.markdown(f"""
-    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:14px 0 20px 0;">
-        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:16px;
-                    padding:16px; text-align:center;">
-            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">📦 Yield</div>
-            <div style="font-size:24px; font-weight:800; color:#0f172a; margin-top:4px;">{_yield_h} <span style="font-size:13px;font-weight:500;color:#64748b;">t/ha</span></div>
-            <div style="font-size:12px; color:#64748b;">{y_crop.title()}</div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px;">
+        <div style="background:#f0fdf4; border:2px solid #bbf7d0; border-radius:16px; padding:18px; text-align:center;">
+            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">📦 Predicted Yield</div>
+            <div style="font-size:26px; font-weight:800; color:#0f172a; margin:8px 0 4px;">{_yield_h} <span style="font-size:13px;font-weight:500;color:#64748b;">t/ha</span></div>
+            <div style="font-size:12px; color:#15803d; font-weight:600;">{y_crop.title()} · {y_state.title()}</div>
         </div>
-        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:16px;
-                    padding:16px; text-align:center;">
-            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">💰 Est. Profit</div>
-            <div style="font-size:24px; font-weight:800; color:#0f172a; margin-top:4px;">₹{_prof_h:,}K</div>
-            <div style="font-size:12px; color:#64748b;">for {y_area:.0f} ha</div>
+        <div style="background:#fffbeb; border:2px solid #fde68a; border-radius:16px; padding:18px; text-align:center;">
+            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">💰 Est. Net Profit</div>
+            <div style="font-size:26px; font-weight:800; color:#0f172a; margin:8px 0 4px;">₹{_prof_h:,}K</div>
+            <div style="font-size:12px; color:#92400e; font-weight:600;">for {y_area:.0f} hectare(s)</div>
         </div>
-        <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:16px;
-                    padding:16px; text-align:center;">
-            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">📈 Mandi Price</div>
-            <div style="font-size:24px; font-weight:800; color:#0f172a; margin-top:4px;">₹{_price_h:,}</div>
-            <div style="font-size:12px; color:#64748b;">/quintal avg</div>
+        <div style="background:#f0f9ff; border:2px solid #bae6fd; border-radius:16px; padding:18px; text-align:center;">
+            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">📈 Avg Mandi Price</div>
+            <div style="font-size:26px; font-weight:800; color:#0f172a; margin:8px 0 4px;">₹{_price_h:,}</div>
+            <div style="font-size:12px; color:#0369a1; font-weight:600;">per quintal</div>
         </div>
-        <div style="background:#fdf4ff; border:1px solid #e9d5ff; border-radius:16px;
-                    padding:16px; text-align:center;">
-            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">🗓️ Sell Timing</div>
-            <div style="font-size:20px; font-weight:800; color:{_sell_color}; margin-top:4px;">{_sell_label}</div>
-            <div style="font-size:12px; color:#64748b;">Peak: {_peak_home}</div>
+        <div style="background:#fdf4ff; border:2px solid #e9d5ff; border-radius:16px; padding:18px; text-align:center;">
+            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">🗓️ Best Time to Sell</div>
+            <div style="font-size:20px; font-weight:800; color:{_sell_color}; margin:8px 0 4px;">{_sell_label}</div>
+            <div style="font-size:12px; color:#7c3aed; font-weight:600;">Peak month: {_peak_home}</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
     # ─────────────────────────────────────────────────────────────────────────
 
-    st.markdown("**Ask your FarmAI Assistant anything:**")
+    st.markdown("**💬 Ask your FarmAI Assistant anything:**")
 
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [
