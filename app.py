@@ -415,7 +415,7 @@ POSSIBLE_DATA_DIRS = [
 SHAP_DIR  = os.path.join(OUT_DIR, "shap_charts")
 
 # 2. INITIALIZE STATE
-if "page"             not in st.session_state: st.session_state.page             = "Overview"
+if "page"             not in st.session_state: st.session_state.page             = "AI Assistant"
 if "n"                not in st.session_state: st.session_state.n                = 70
 if "p"                not in st.session_state: st.session_state.p                = 45
 if "k"                not in st.session_state: st.session_state.k                = 30
@@ -508,8 +508,8 @@ def render_sidebar_nav():
         """, unsafe_allow_html=True)
         
         PAGES = [
-            ("Overview", "📊"),
             ("AI Assistant", "🤖"),
+            ("Overview", "📊"),
             ("Seasonal Calendar", "🗓️"),
             ("Crop Recommendation", "🌿"),
             ("Yield Prediction", "📈"),
@@ -724,6 +724,7 @@ if not st.session_state.app_initialized or st.session_state.page == "Onboarding"
                     st.session_state.p    = defaults["p"]
                     st.session_state.k    = defaults["k"]
                     st.session_state.rain = defaults["rain"]
+                st.session_state.page = "AI Assistant"  # Land on the assistant, not the dashboard
                 st.rerun()
 
             st.markdown("""
@@ -1161,8 +1162,53 @@ if page == "Overview":
 
 elif page == "AI Assistant":
     render_header()
-    st.markdown("### 🤖 FarmAI Assistant")
-    st.markdown("Ask anything about your farm, crops, or market prices.")
+
+    # ── INSTANT SUMMARY BAR ──────────────────────────────────────────────────
+    _cal_home = CROP_CALENDAR.get(y_crop.lower(), DEFAULT_CALENDAR)
+    _peak_home = _cal_home['sell_peak']
+    _months_order_h = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    _curr_m_h = datetime.now().strftime("%b")
+    _curr_i_h = _months_order_h.index(_curr_m_h) if _curr_m_h in _months_order_h else 0
+    _peak_i_h = _months_order_h.index(_peak_home) if _peak_home in _months_order_h else 0
+    _mtp_h    = (_peak_i_h - _curr_i_h) % 12
+    _sell_label = "Sell Now! ✅" if _mtp_h == 0 else f"Sell in {_mtp_h}m ⏳"
+    _sell_color = "#15803d" if _mtp_h == 0 else "#f59e0b"
+
+    _res_c_h  = resolve_price_crop(y_crop, price_crops_monthly)
+    _price_h  = int(df_price[df_price['crop'] == _res_c_h]['avg_modal_price'].mean()) if not df_price.empty and _res_c_h else 0
+    _prof_h   = int(profit_total) if 'profit_total' in dir() else 0
+
+    st.markdown(f"""
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px;">
+        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:16px;
+                    padding:16px; text-align:center;">
+            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">🌾 Growing</div>
+            <div style="font-size:22px; font-weight:800; color:#0f172a; margin-top:4px;">{y_crop.title()}</div>
+            <div style="font-size:12px; color:#64748b;">{y_state.title()}</div>
+        </div>
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:16px;
+                    padding:16px; text-align:center;">
+            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">💰 Est. Profit</div>
+            <div style="font-size:22px; font-weight:800; color:#0f172a; margin-top:4px;">₹{_prof_h:,}K</div>
+            <div style="font-size:12px; color:#64748b;">for {y_area:.0f} ha</div>
+        </div>
+        <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:16px;
+                    padding:16px; text-align:center;">
+            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">📈 Mandi Price</div>
+            <div style="font-size:22px; font-weight:800; color:#0f172a; margin-top:4px;">₹{_price_h:,}</div>
+            <div style="font-size:12px; color:#64748b;">/quintal avg</div>
+        </div>
+        <div style="background:#fdf4ff; border:1px solid #e9d5ff; border-radius:16px;
+                    padding:16px; text-align:center;">
+            <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1px;">🗓️ Best Sell Time</div>
+            <div style="font-size:20px; font-weight:800; color:{_sell_color}; margin-top:4px;">{_sell_label}</div>
+            <div style="font-size:12px; color:#64748b;">Peak: {_peak_home}</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    # ─────────────────────────────────────────────────────────────────────────
+
+    st.markdown("**Ask your FarmAI Assistant anything:**")
 
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [
