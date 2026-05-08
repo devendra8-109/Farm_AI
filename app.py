@@ -472,6 +472,25 @@ def load_data():
 models = load_models()
 df_price, df_yield, df_profit, df_api = load_data()
 
+# ── GLOBAL DERIVED VARIABLES (safe defaults, used across all pages) ──────────
+# Detect actual price column name (may vary between datasets)
+_price_col_candidates = ["avg_modal_price", "modal_price", "price", "avg_price"]
+price_col = next((c for c in _price_col_candidates if c in df_price.columns), None) if not df_price.empty else None
+if price_col and price_col != "avg_modal_price":
+    df_price = df_price.rename(columns={price_col: "avg_modal_price"})
+    price_col = "avg_modal_price"
+elif not price_col and not df_price.empty:
+    # Use whatever numeric column exists
+    _num_cols = df_price.select_dtypes(include="number").columns.tolist()
+    if _num_cols:
+        df_price = df_price.rename(columns={_num_cols[0]: "avg_modal_price"})
+        price_col = "avg_modal_price"
+
+price_crops_monthly = set(df_price["crop"].unique()) if not df_price.empty and "crop" in df_price.columns else set()
+profit_total = 0.0  # Will be recalculated on Overview page
+val_prof     = 0.0  # Will be recalculated on Overview page
+# ─────────────────────────────────────────────────────────────────────────────
+
 # ─────────────────────────────────────────────────────────────────────────────
 # UI COMPONENTS
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1012,7 +1031,7 @@ if page == "Overview":
         <div class="f-card" style="height: 220px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
             <div style="font-size: 40px; margin-bottom: 10px;">📦</div>
             <div style="color: var(--text-muted); font-size: 15px; font-weight: 700;">Predicted Yield</div>
-            <div style="font-size: 34px; font-weight: 800; color: var(--text-main);">{yield_val:,.2f} <span style="font-size: 18px; font-weight: 600; color: var(--text-muted);">t/ha</span></div>
+            <div style="font-size: 34px; font-weight: 800; color: var(--text-main);">{f"{yield_val:,.2f}" if yield_val is not None else "N/A"} <span style="font-size: 18px; font-weight: 600; color: var(--text-muted);">t/ha</span></div>
             <div style="margin-top: 12px;"><span class="pill pill-success" style="font-size: 12px; border: 1px solid #15803d;">✓ {yield_source}</span></div>
         </div>
         """, unsafe_allow_html=True)
