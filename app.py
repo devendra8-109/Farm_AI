@@ -534,7 +534,7 @@ def get_best_crop_for_state(state: str) -> str:
     if "crop_recommender.pkl" in models:
         try:
             soil = STATE_SOIL_DEFAULTS.get(state.lower(), {"n":70,"p":45,"k":30,"rain":500})
-            s_temp, s_hum, s_ph = get_state_climate(state)
+            s_temp, s_hum, s_ph, _ = get_state_climate(state)
             model = models["crop_recommender.pkl"]
             probs = model.predict_proba([[soil["n"], soil["p"], soil["k"],
                                           s_temp, s_hum, s_ph, soil["rain"]]])[0]
@@ -557,7 +557,7 @@ def get_best_crop_for_state(state: str) -> str:
 @st.cache_data
 def get_state_crop_comparison(state: str, n: int, p: int, k: int, rain: int):
     """Build comparison DataFrame for all crops in a state, sorted by combined score."""
-    s_temp, s_hum, s_ph = get_state_climate(state)
+    s_temp, s_hum, s_ph, _ = get_state_climate(state)
     state_crops_list = sorted(df_yield[df_yield["state"] == state]["crop"].unique())
     state_prof = df_profit[df_profit["state"].str.lower() == state.lower()]
 
@@ -857,7 +857,7 @@ def get_best_states(n, p, k, rain):
     crops = model.classes_
     results = []
     for state in df_yield["state"].unique():
-        s_temp, s_humidity, s_ph = get_state_climate(state)
+        s_temp, s_humidity, s_ph, _ = get_state_climate(state)
         probs = model.predict_proba([[n, p, k, s_temp, s_humidity, s_ph, rain]])[0]
         state_crops = set(df_yield[df_yield['state'] == state]['crop'].str.lower().unique())
         filtered = [(crops[i], probs[i]) for i in range(len(crops)) if crops[i].lower() in state_crops]
