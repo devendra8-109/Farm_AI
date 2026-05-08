@@ -1028,13 +1028,27 @@ if page == "Overview":
     with m4:
         state_prof = df_profit[df_profit['state'].str.lower() == y_state.lower()]
         crop_prof  = state_prof[state_prof['crop'].str.lower() == y_crop.lower()]
-        val_prof   = crop_prof.iloc[0]['net_profit'] if not crop_prof.empty else 0
+        if not crop_prof.empty:
+            val_prof = crop_prof.iloc[0]['net_profit']
+            profit_total = (val_prof * y_area) / 1000
+            profit_source = "Historical Data"
+        elif yield_val:
+            # Dynamic fallback: yield × avg mandi price × area × 65% margin
+            _res_c = resolve_price_crop(y_crop, price_crops_monthly)
+            _cp = df_price[df_price['crop'] == _res_c]['avg_modal_price'].mean() if not df_price.empty else 2000
+            profit_total = (yield_val * 10 * _cp * 0.65 * y_area) / 1000
+            val_prof = profit_total * 1000 / y_area if y_area else 0
+            profit_source = "AI Estimate"
+        else:
+            profit_total = 0
+            val_prof = 0
+            profit_source = "Insufficient Data"
         st.markdown(f"""
         <div class="f-card f-card-primary" style="height: 220px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
             <div style="font-size: 40px; margin-bottom: 10px;">💰</div>
             <div style="color: rgba(255,255,255,0.95); font-size: 15px; font-weight: 700;">Est. Net Profit</div>
-            <div style="font-size: 34px; font-weight: 800; color: white;">₹{(val_prof * y_area)/1000:,.1f}K</div>
-            <div style="margin-top: 12px; color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500;">Based on {y_crop.title()}</div>
+            <div style="font-size: 34px; font-weight: 800; color: white;">₹{profit_total:,.1f}K</div>
+            <div style="margin-top: 8px; color: rgba(255,255,255,0.8); font-size: 12px;">for {y_area:.0f} ha · {profit_source}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1152,13 +1166,31 @@ elif page == "AI Assistant":
 
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [
-            {"role": "assistant", "content": f"Namaste! I'm your FarmAI Assistant. I see you're currently looking at **{y_crop.title()}** in **{y_state}**. How can I help you today?"}
+            {"role": "assistant", "content": f"Namaste! 🙏 I'm your FarmAI Assistant.\n\nI see you're growing **{y_crop.title()}** in **{y_state.title()}**. I can help you with:\n- 💰 **Profit estimates** — How much will you earn this season?\n- 📈 **Sell timing** — Is it a good time to sell now, or wait?\n- 🌾 **Crop advice** — What else should you grow?\n- 🌧️ **Weather impact** — How will rain affect your harvest?\n\nWhat would you like to know?"}
         ]
 
     for msg in st.session_state.chat_history:
         st.chat_message(msg["role"]).write(msg["content"])
 
-    if prompt := st.chat_input("Type your question (e.g., 'Is it a good time to sell?' or 'What should I grow?')"):
+    # Suggestion chips
+    st.markdown("**Quick questions:**")
+    qcols = st.columns(2)
+    with qcols[0]:
+        if st.button(f"💰 How much profit from {y_crop.title()}?", use_container_width=True):
+            st.session_state.chat_history.append({"role": "user", "content": f"How much profit will I make from {y_crop}?"})
+            st.rerun()
+        if st.button(f"📈 Is it a good time to sell {y_crop.title()}?", use_container_width=True):
+            st.session_state.chat_history.append({"role": "user", "content": f"Is it a good time to sell {y_crop}?"})
+            st.rerun()
+    with qcols[1]:
+        if st.button(f"🌾 What should I grow instead?", use_container_width=True):
+            st.session_state.chat_history.append({"role": "user", "content": "What crop should I grow?"})
+            st.rerun()
+        if st.button(f"🌧️ How will weather affect my crop?", use_container_width=True):
+            st.session_state.chat_history.append({"role": "user", "content": "How will weather affect my harvest?"})
+            st.rerun()
+
+    if prompt := st.chat_input("Ask anything about your farm..."):
         st.session_state.chat_history.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
@@ -1166,35 +1198,80 @@ elif page == "AI Assistant":
         query = prompt.lower()
         response = ""
 
-        # Intent: Selling Time
-        if "sell" in query or "market" in query or "price" in query:
-            cal = CROP_CALENDAR.get(y_crop.lower(), DEFAULT_CALENDAR)
-            peak_month = cal['sell_peak']
-            curr_month = datetime.now().strftime("%b")
-            if curr_month == peak_month:
-                response = f"Yes! Our models show that **{peak_month}** is historically a peak price month for {y_crop.title()} in {y_state}. It's an excellent time to sell."
+        # Get real data for responses
+        _res_crop = resolve_price_crop(y_crop, price_crops_monthly)
+        _price_rows = df_price[df_price['crop'] == _res_crop] if not df_price.empty else pd.DataFrame()
+        _latest_price = int(_price_rows['avg_modal_price'].iloc[-1]) if not _price_rows.empty else None
+        _avg_price = int(_price_rows['avg_modal_price'].mean()) if not _price_rows.empty else 2000
+        _cal = CROP_CALENDAR.get(y_crop.lower(), DEFAULT_CALENDAR)
+        _peak_month = _cal['sell_peak']
+        _curr_month = datetime.now().strftime("%b")
+        _months_order = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+        _curr_idx = _months_order.index(_curr_month) if _curr_month in _months_order else 0
+        _peak_idx = _months_order.index(_peak_month) if _peak_month in _months_order else 0
+        _months_to_peak = (_peak_idx - _curr_idx) % 12
+
+        # Intent: Profit
+        if "profit" in query or "earn" in query or "income" in query or "paise" in query or "paisa" in query:
+            if yield_val and y_area:
+                _total_prod = yield_val * y_area  # tonnes
+                _gross = _total_prod * 10 * _avg_price  # 10 quintals per tonne
+                _net = _gross * 0.65
+                response = (
+                    f"📊 **Profit Estimate for your {y_area:.0f} ha {y_crop.title()} farm:**\n\n"
+                    f"- Predicted yield: **{yield_val:.2f} t/ha** × {y_area:.0f} ha = **{_total_prod:.1f} tonnes**\n"
+                    f"- Current mandi price: **₹{_avg_price:,}/quintal**\n"
+                    f"- Gross revenue: ₹{int(_gross/1000):,}K\n"
+                    f"- **Est. net profit (after costs): ₹{int(_net/1000):,}K** 💰\n\n"
+                    f"This assumes ~35% deduction for seeds, fertilizer, labour, and transport."
+                )
             else:
-                response = f"Based on historical Mandi trends, the best time to sell {y_crop.title()} is usually in **{peak_month}**. Right now is a good time to store your produce if you can."
+                response = f"I need your farm area to calculate profit. Please set it in the sidebar. Based on average yields, {y_crop.title()} typically earns ₹25,000–₹45,000 per hectare in {y_state.title()}."
+
+        # Intent: Selling Time
+        elif "sell" in query or "market" in query or "price" in query or "becho" in query or "bikri" in query:
+            price_str = f"₹{_latest_price:,}/quintal" if _latest_price else "data unavailable"
+            if _months_to_peak == 0:
+                sell_advice = f"✅ **Yes! Sell now.** {_curr_month} is historically the peak price month for {y_crop.title()}."
+            elif _months_to_peak <= 2:
+                sell_advice = f"⏳ **Wait {_months_to_peak} more month(s).** Prices typically peak in **{_peak_month}** for {y_crop.title()} — that's just {_months_to_peak} month(s) away."
+            else:
+                sell_advice = f"📦 **Store if possible.** Peak selling season for {y_crop.title()} is **{_peak_month}**, which is {_months_to_peak} months away. Sell now only if storage costs are high."
+            response = (
+                f"{sell_advice}\n\n"
+                f"- Current avg mandi price: **{price_str}**\n"
+                f"- Peak sell month: **{_peak_month}**\n"
+                f"- Months until peak: **{_months_to_peak}**"
+            )
 
         # Intent: Crop Recommendation
-        elif "grow" in query or "plant" in query or "recommend" in query:
+        elif "grow" in query or "plant" in query or "crop" in query or "ugao" in query:
             best_c = get_best_crop_for_state(y_state)
-            response = f"Given your location in {y_state} and the current season, our AI highly recommends growing **{best_c.title()}**. It currently shows the highest profit potential of approx ₹{int(df_profit[df_profit['crop'].str.lower()==best_c.lower()]['net_profit'].mean() if not df_profit.empty else 0)/1000}K per hectare."
-
-        # Intent: Yield Factors
-        elif "why" in query or "factor" in query or "reason" in query:
-            response = f"The biggest factor for your {y_crop.title()} yield right now is **Rainfall**. Our models show it contributes 23% to the final outcome—more than even fertilizer levels. Water management is key this season."
+            _best_prof_rows = df_profit[df_profit['crop'].str.lower() == best_c.lower()] if best_c else pd.DataFrame()
+            _best_prof = int(_best_prof_rows['net_profit'].mean() / 1000) if not _best_prof_rows.empty else 0
+            response = (
+                f"🌾 **Best crop for {y_state.title()} right now: {best_c.title()}**\n\n"
+                f"- Avg profit potential: **₹{_best_prof}K/ha**\n"
+                f"- Our AI ranks it highest for your soil conditions and market prices.\n\n"
+                f"You're currently growing **{y_crop.title()}** — {'great choice!' if y_crop.lower() == best_c.lower() else f'consider switching to {best_c.title()} next season for higher returns.'}"
+            )
 
         # Intent: Weather
-        elif "weather" in query or "rain" in query:
+        elif "weather" in query or "rain" in query or "barish" in query:
             if weather_advice:
-                response = f"Here is the hyperlocal weather outlook: {weather_advice}"
+                response = f"🌧️ **Weather outlook for your area:**\n\n{weather_advice}\n\nPlan your fertilizer and irrigation accordingly."
             else:
-                response = f"The weather outlook for {y_state} is currently stable. No heavy rain expected in the next 3 days."
+                response = f"The weather for {y_state.title()} appears stable right now. No extreme conditions expected. Good time for regular farm activities."
 
         # Fallback
         else:
-            response = f"I'm here to help with your {y_crop.title()} farm in {y_state}. You can ask me about the best time to sell, what other crops to grow, or how weather might affect your harvest."
+            response = (
+                f"I can help you with your **{y_crop.title()}** farm in **{y_state.title()}**. Try asking:\n\n"
+                f"- *'How much profit will I make?'*\n"
+                f"- *'Is it a good time to sell?'*\n"
+                f"- *'What crop should I grow?'*\n"
+                f"- *'How will the rain affect my harvest?'*"
+            )
 
         st.session_state.chat_history.append({"role": "assistant", "content": response})
         st.chat_message("assistant").write(response)
