@@ -617,120 +617,124 @@ def get_state_crop_comparison(state: str, n: int, p: int, k: int, rain: int):
     df_out = pd.DataFrame(rows)
     if df_out.empty or "Suitability (%)" not in df_out.columns:
         return df_out
-    # If ML gives all zeros, sort by profit then area
-    if df_out["Suitability (%)"].max() == 0:
-        df_out = df_out.sort_values(["Net Profit (₹K)", "Avg Area (ha)"],
-                                    ascending=False).reset_index(drop=True)
-    else:
-        df_out = df_out.sort_values("Suitability (%)", ascending=False).reset_index(drop=True)
-    return df_out
-
-# ─────────────────────────────────────────────────────────────────────────────
-# ONBOARDING SCREEN — shown on first launch only
+    # If ML gives all ze# ONE-QUESTION LANDING SCREEN
 # ─────────────────────────────────────────────────────────────────────────────
 if not st.session_state.app_initialized or st.session_state.page == "Onboarding":
-    st.markdown(f"""
+    st.markdown("""
     <style>
-        /* 1. Global Reset & Full-Screen Background */
-        [data-testid="stSidebar"] {{ display: none !important; }}
-        header, footer {{ visibility: hidden !important; }}
-        
-        .stApp {{
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+        [data-testid="stSidebar"] { display: none !important; }
+        header, footer { visibility: hidden !important; }
+        .stApp {
+            background: linear-gradient(135deg, rgba(6,30,14,0.85) 0%, rgba(21,128,61,0.75) 100%),
                         url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80");
             background-size: cover !important;
             background-position: center !important;
             background-attachment: fixed !important;
-            overflow: hidden !important;
-        }}
-
-        /* 2. Zero-Scroll Centering */
-        div[data-testid="stAppViewContainer"] {{
-            padding: 0 !important;
-            height: 100vh;
-            overflow: hidden !important;
-        }}
-        
-        div[data-testid="stMain"] > div {{
-            height: 100vh;
+        }
+        div[data-testid="stMain"] > div {
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 !important;
-        }}
-
-        /* 3. Style the specific column as the Card */
-        [data-testid="column"] {{
-            background: rgba(255, 255, 255, 0.98) !important;
-            padding: 50px !important;
-            border-radius: 40px !important;
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6) !important;
-            max-width: 500px !important;
-            text-align: center;
-            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            backdrop-filter: blur(10px);
-        }}
-
-        @keyframes slideUp {{
-            from {{ opacity: 0; transform: translateY(40px); }}
-            to {{ opacity: 1; transform: translateY(0); }}
-        }}
-
-        h1, h2, h3 {{ color: #0f172a !important; text-align: center; }}
-        p {{ color: #475569 !important; text-align: center; }}
+            padding: 20px !important;
+        }
+        [data-testid="column"] {
+            background: rgba(255, 255, 255, 0.97) !important;
+            padding: 50px 45px !important;
+            border-radius: 32px !important;
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.7) !important;
+            animation: riseUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes riseUp {
+            from { opacity: 0; transform: translateY(50px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .ob-question {
+            font-size: 26px; font-weight: 800;
+            color: #0f172a; line-height: 1.3;
+            margin: 18px 0 6px 0;
+        }
+        .ob-sub { font-size: 15px; color: #64748b; margin-bottom: 28px; }
+        .ob-label {
+            font-size: 11px; font-weight: 800; color: #94a3b8;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 6px; display: block;
+        }
     </style>
     """, unsafe_allow_html=True)
 
     _, col, _ = st.columns([1, 1.8, 1])
     with col:
-        st.markdown(f"""
-            <div style="font-size: 70px; margin-bottom: 10px;">🚜</div>
-            <h1 style="margin: 0; font-size: 42px; font-weight: 800; letter-spacing: -1px;">FarmAI</h1>
-            <p style="font-size: 18px; margin-top: 10px; font-weight: 500;">Precision Agriculture Analytics</p>
-            <div style="height: 1px; background: #eee; margin: 30px 0;"></div>
-            <p style="font-size: 13px; color: #94a3b8 !important; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">Location & Crop Selection</p>
+        # Brand
+        st.markdown("""
+            <div style="text-align:center; margin-bottom: 4px;">
+                <div style="display:inline-flex; align-items:center; gap:10px;
+                            background:#f0fdf4; padding:10px 20px; border-radius:50px;
+                            border:1px solid #bbf7d0;">
+                    <span style="font-size:22px;">🌱</span>
+                    <span style="font-weight:800; color:#15803d; font-size:16px; letter-spacing:0.5px;">FarmAI</span>
+                </div>
+            </div>
+            <div class="ob-question">What crop are you growing,<br>and where?</div>
+            <div class="ob-sub">Answer one question. Get a complete profit forecast, best sell time, and AI advice — instantly.</div>
         """, unsafe_allow_html=True)
-        
-        all_states_ob = sorted(df_yield["state"].unique())
+
+        # ─── State selector ───
+        st.markdown('<span class="ob-label">📍 Your Location (State)</span>', unsafe_allow_html=True)
+        all_states_ob = [""] + sorted(df_yield["state"].unique())
         ob_state = st.selectbox(
-            "State",
-            [""] + all_states_ob,
-            format_func=lambda x: "— Choose your state —" if x == "" else x,
-            key="ob_state",
-            label_visibility="collapsed"
+            "State", all_states_ob,
+            format_func=lambda x: "— Choose your state —" if x == "" else x.title(),
+            key="ob_state", label_visibility="collapsed"
         )
 
         if ob_state:
-            ob_crops = sorted(df_yield[df_yield["state"] == ob_state]["crop"].unique())
-            crop_count = len(ob_crops)
-            
+            ob_crops  = sorted(df_yield[df_yield["state"] == ob_state]["crop"].unique())
+            ob_best   = get_best_crop_for_state(ob_state) or (ob_crops[0] if ob_crops else "")
+            ob_crops_lower = [c.lower() for c in ob_crops]
+            ob_idx    = ob_crops_lower.index(ob_best.lower()) if ob_best and ob_best.lower() in ob_crops_lower else 0
+
+            # Instant AI signal
             st.markdown(f"""
-                <div style="background: #eaf5ea; padding: 12px; border-radius: 15px; margin: 20px 0; border: 1px solid #d1e7d1;">
-                    <span style="color: #15803d; font-weight: 700; font-size: 15px;">📊 {crop_count} Crops</span> 
-                    <span style="color: #475569; font-size: 14px;"> available in {ob_state}</span>
+                <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:14px;
+                            padding:12px 16px; margin:14px 0 18px 0; display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:18px;">🤖</span>
+                    <span style="font-size:13px; color:#166534; font-weight:600;">
+                        AI suggests <b>{ob_best.title()}</b> — highest profit potential in {ob_state.title()} right now.
+                    </span>
                 </div>
             """, unsafe_allow_html=True)
 
-            ob_best = get_best_crop_for_state(ob_state)
-            if not ob_best and ob_crops: ob_best = ob_crops[0]
-            
-            st.markdown(f"<div style='height: 15px;'></div>", unsafe_allow_html=True)
-            ob_crops_lower = [c.lower() for c in ob_crops]
-            ob_default_idx = ob_crops_lower.index(ob_best.lower()) if ob_best and ob_best.lower() in ob_crops_lower else 0
-            ob_crop = st.selectbox("Crop", ob_crops, index=ob_default_idx, key="ob_crop", label_visibility="collapsed")
+            # ─── Crop selector ───
+            st.markdown('<span class="ob-label">🌾 Your Crop</span>', unsafe_allow_html=True)
+            ob_crop = st.selectbox("Crop", ob_crops, index=ob_idx, key="ob_crop", label_visibility="collapsed")
 
-            st.markdown("<br>", unsafe_allow_html=True)
-            if st.button("🚀 Launch Dashboard", type="primary", use_container_width=True):
+            st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+
+            # ─── CTA Button ───
+            if st.button("✅ Show My Farm Analysis", type="primary", use_container_width=True):
                 st.session_state.y_state = ob_state
                 st.session_state.y_crop  = ob_crop
                 st.session_state._last_autofill_state = ""
                 st.session_state.app_initialized = True
+                # Autofill soil defaults for state
+                defaults = STATE_SOIL_DEFAULTS.get(ob_state.lower().strip(), {})
+                if defaults:
+                    st.session_state.n    = defaults["n"]
+                    st.session_state.p    = defaults["p"]
+                    st.session_state.k    = defaults["k"]
+                    st.session_state.rain = defaults["rain"]
                 st.rerun()
+
+            st.markdown("""
+                <div style="text-align:center; margin-top:18px; font-size:12px; color:#94a3b8;">
+                    🔒 No signup needed &nbsp;·&nbsp; 🌍 India-wide data &nbsp;·&nbsp; ⚡ Instant results
+                </div>
+            """, unsafe_allow_html=True)
         else:
-            st.markdown("<div style='height: 120px;'></div>", unsafe_allow_html=True)
+            st.markdown("<div style='height:100px'></div>", unsafe_allow_html=True)
 
     st.stop()
-
 
 
 # 4. SIDEBAR & NAVIGATION
