@@ -818,6 +818,17 @@ def safe_encode(le, val):
 temp, humidity, ph, weather_advice = get_state_climate(y_state, st.session_state.get("y_district", "All Districts"))
 
 
+# ── SAFETY GUARD: ensure y_crop and y_state are never None ───────────────
+_all_states_fallback = sorted(STATE_COORDS.keys())
+if not y_state or y_state not in _all_states_fallback:
+    y_state = _all_states_fallback[0] if _all_states_fallback else "madhya pradesh"
+    st.session_state.y_state = y_state
+_all_crops_fallback = sorted(df_yield[df_yield["state"] == y_state]["crop"].unique())
+if not y_crop or (y_crop not in _all_crops_fallback and _all_crops_fallback):
+    y_crop = _all_crops_fallback[0] if _all_crops_fallback else "wheat"
+    st.session_state.y_crop = y_crop
+# ─────────────────────────────────────────────────────────────────────────
+
 
 # Yield prediction — ML model first, historical average as fallback
 yield_val = None
