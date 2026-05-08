@@ -400,6 +400,9 @@ def resolve_price_crop(crop_name: str, price_crops: set) -> str:
     for pc in price_crops:
         if pc in low:
             return pc
+    # 5. Handlers for crops missing from Mandi but with fixed industry rates
+    if low == "sugarcane": return "sugarcane_fallback"
+    
     return low   # fallback – will produce empty df
 
 # 2. PATHS
@@ -506,7 +509,12 @@ def render_header():
             <h2 style="margin: 0; font-size: 24px;">FarmAI</h2>
         </div>
         <div style="display: flex; align-items: center; gap: 20px;">
-            <div style="text-align: right;">
+            <a href="https://wa.me/?text=Check%20out%20my%20farm%20analysis%20on%20FarmAI!%20I'm%20growing%20{st.session_state.y_crop.title()}%20in%20{st.session_state.y_state.title()}.%20Try%20the%20AI%20Assistant%20here:%20https://farmai-app.streamlit.app/" 
+               target="_blank" 
+               style="background: #25D366; color: white; padding: 10px 18px; border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,211,102,0.25); transition: transform 0.2s;">
+               <span style="font-size: 18px;">💬</span> Share on WhatsApp
+            </a>
+            <div style="text-align: right; border-left: 1px solid #e2e8f0; padding-left: 20px;">
                 <div style="font-weight: 600; font-size: 14px; color: var(--text-main);">Devendra Chouhan</div>
                 <div style="font-size: 12px; color: var(--text-muted);">Premium Farmer</div>
             </div>
@@ -1486,7 +1494,34 @@ elif page == "Seasonal Calendar":
     
     cal = CROP_CALENDAR.get(y_crop.lower(), DEFAULT_CALENDAR)
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    curr_m = datetime.now().strftime("%b")
     
+    # Identify Current Phase
+    phase = "Off-Season"
+    phase_color = "#94a3b8"
+    phase_advice = "Monitor market prices and prepare for the next season."
+    
+    if curr_m == cal['sow']:
+        phase, phase_color, phase_advice = "Sowing Phase 🌱", "#15803d", "Best time to plant! Ensure soil moisture is adequate."
+    elif curr_m == cal['harvest']:
+        phase, phase_color, phase_advice = "Harvesting Phase 🚜", "#f59e0b", "Harvest ready! Prepare storage and check mandi rates."
+    elif curr_m == cal['sell_peak']:
+        phase, phase_color, phase_advice = "Selling Peak 💰", "#0369a1", "Market prices are at their highest. Sell now for max profit."
+    
+    st.markdown(f"""
+    <div class="f-card animate-in" style="border-left: 5px solid {phase_color}; margin-bottom: 25px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h4 style="margin: 0; color: {phase_color} !important;">Current Status: {phase}</h4>
+                <p style="margin: 5px 0 0 0; color: var(--text-muted) !important;">{phase_advice}</p>
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">
+                Today: {datetime.now().strftime("%d %b %Y")}
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
     # Simple Visual Timeline
     st.markdown('<div class="f-card">', unsafe_allow_html=True)
     cols = st.columns(12)
@@ -1651,13 +1686,20 @@ elif page == "Profit Optimization":
     # ── 1. Dynamic Yield & Profit Calculation ──────────────────────
     price_crops_monthly = set(df_price['crop'].unique())
     resolved_monthly = resolve_price_crop(y_crop, price_crops_monthly)
-    monthly_sub = df_price[df_price['crop'] == resolved_monthly].sort_values('date')
-    latest_price = monthly_sub.iloc[-1]['avg_modal_price'] if not monthly_sub.empty else 0
+    if resolved_monthly == "sugarcane_fallback":
+        latest_price = 305  # FRP for 2023-24 season
+    else:
+        monthly_sub = df_price[df_price['crop'] == resolved_monthly].sort_values('date')
+        latest_price = monthly_sub.iloc[-1]['avg_modal_price'] if not monthly_sub.empty else 0
     
     # Dynamic projection based on current sliders
     if yield_val and latest_price > 0:
-        # Convert yield (t/ha) to quintals (q/ha) since market price is per qtl
-        revenue_per_ha = yield_val * 10 * latest_price
+        # Sanity check for Sugarcane (which is usually tonnes, price is per qtl)
+        if y_crop.lower() == "sugarcane":
+             # Sugarcane yield is high (80 t/ha), price is ~305 per qtl
+             revenue_per_ha = yield_val * 10 * latest_price
+        else:
+             revenue_per_ha = yield_val * 10 * latest_price
         est_cost_per_ha = revenue_per_ha * 0.35  # Estimate 35% cost overhead
         total_net_profit = (revenue_per_ha - est_cost_per_ha) * y_area
         
@@ -1705,15 +1747,22 @@ elif page == "Profit Optimization":
                 s_enc = safe_encode(s_enc_model, y_state)
                 if c_enc is not None and s_enc is not None:
                     dynamic_yield = model_yield.predict([[c_enc, s_enc, y_area, rain]])[0]
+                    # Sanity Guard for Spice/Luxury crops (Model Outliers)
+                    if crop_name.lower() in ["black pepper", "cardamom", "ginger"]:
+                        dynamic_yield = min(dynamic_yield, 2.5) # Max 2.5 t/ha for spices
             
             # Fallback to historical yield if ML fails
             if dynamic_yield is None:
-                dynamic_yield = row['net_profit'] / 50000 # Rough proxy for display if missing
+                dynamic_yield = row['net_profit'] / 50000 
+                if crop_name.lower() in ["black pepper", "cardamom"]: dynamic_yield = 0.5
             
             # B. Get latest price for this crop
             res_crop = resolve_price_crop(crop_name, price_crops_monthly)
-            crop_p_sub = df_price[df_price['crop'] == res_crop]
-            c_price = crop_p_sub['avg_modal_price'].mean() if not crop_p_sub.empty else 2200
+            if res_crop == "sugarcane_fallback":
+                c_price = 305
+            else:
+                crop_p_sub = df_price[df_price['crop'] == res_crop]
+                c_price = crop_p_sub['avg_modal_price'].mean() if not crop_p_sub.empty else 2200
             
             # C. Dynamic Profit Calculation
             dynamic_profit_ha = (dynamic_yield * 10 * c_price) * 0.65 # 65% margin
@@ -1784,8 +1833,16 @@ elif page == "Impact Analysis":
     st.markdown("Discover which factors influence the AI's crop recommendations.")
     
     # Real Model Importance Data
-    importances = [0.106, 0.146, 0.178, 0.073, 0.214, 0.052, 0.231]
-    labels = ["Nitrogen (N)", "Phosphorus (P)", "Potassium (K)", "Temperature", "Humidity", "Soil pH", "Rainfall"]
+    model_rec = models.get("crop_recommender.pkl")
+    labels = ["Nitrogen", "Phosphorus", "Potassium", "Temperature", "Humidity", "Soil pH", "Rainfall"]
+    if model_rec:
+        importances = list(model_rec.feature_importances_)
+    else:
+        importances = [0.106, 0.146, 0.178, 0.073, 0.214, 0.052, 0.231]
+    
+    # Identify top driver
+    top_idx = importances.index(max(importances))
+    top_driver = labels[top_idx]
     
     c1, c2 = st.columns([1, 1.2])
     
@@ -1795,13 +1852,13 @@ elif page == "Impact Analysis":
             <div style="font-size: 60px; margin-bottom: 20px;">💡</div>
             <h3 style="margin: 0; color: #0f172a !important;">Assistant's Insights</h3>
             <p style="font-size: 17px; color: #475569 !important; margin-top: 15px; line-height: 1.6;">
-                "<b>Rainfall</b> is the single biggest factor affecting your profit this season. 
-                Even if you increase fertilizer, a 10% drop in rain would have a 3x larger impact on your final harvest."
+                "<b>{top_driver}</b> is the single biggest factor affecting your profit this season. 
+                Our AI analysis shows it has a <b>{importances[top_idx]*100:.1f}%</b> weight in the recommendation."
             </p>
             <div style="margin-top: 40px; background: #f0fdf4; padding: 25px; border-radius: 20px; border: 1px dashed #15803d;">
-                <div style="font-weight: 800; color: #15803d; font-size: 15px; text-transform: uppercase;">Plain English Summary</div>
+                <div style="font-weight: 800; color: #15803d; font-size: 15px; text-transform: uppercase;">Actionable Summary</div>
                 <div style="font-size: 15px; color: #166534; margin-top: 8px; font-weight: 500;">
-                    Focus on <b>water conservation</b> this month. Your soil Nitrogen levels are already optimal for {y_crop.title()}.
+                    Optimizing <b>{top_driver}</b> levels will provide the highest return on investment for your {y_crop.title()} farm.
                 </div>
             </div>
         </div>
