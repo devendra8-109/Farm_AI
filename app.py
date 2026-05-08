@@ -817,16 +817,6 @@ def safe_encode(le, val):
 # Get state/district based climate
 temp, humidity, ph, weather_advice = get_state_climate(y_state, st.session_state.get("y_district", "All Districts"))
 
-# Get District if possible
-all_districts = ["All Districts"]
-if not df_price.empty and 'district' in df_price.columns:
-    dist_list = sorted(df_price[df_price['state'].str.lower() == y_state.lower()]['district'].dropna().unique())
-    all_districts.extend([d.title() for d in dist_list])
-
-with st.sidebar:
-    st.markdown("---")
-    y_district = st.selectbox("📍 District / Mandi", all_districts, key="y_district_sel")
-    st.session_state.y_district = y_district
 
 
 # Yield prediction — ML model first, historical average as fallback
