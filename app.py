@@ -637,7 +637,16 @@ def get_state_crop_comparison(state: str, n: int, p: int, k: int, rain: int):
     df_out = pd.DataFrame(rows)
     if df_out.empty or "Suitability (%)" not in df_out.columns:
         return df_out
-    # If ML gives all ze# ONE-QUESTION LANDING SCREEN
+    # If ML gives all zeros, sort by profit then area
+    if df_out["Suitability (%)"].max() == 0:
+        df_out = df_out.sort_values(["Net Profit (₹K)", "Avg Area (ha)"],
+                                    ascending=False).reset_index(drop=True)
+    else:
+        df_out = df_out.sort_values("Suitability (%)",
+                                    ascending=False).reset_index(drop=True)
+    return df_out
+
+# ONE-QUESTION LANDING SCREEN
 # ─────────────────────────────────────────────────────────────────────────────
 if not st.session_state.app_initialized or st.session_state.page == "Onboarding":
     st.markdown("""
@@ -820,6 +829,13 @@ with st.sidebar:
 
     st.markdown("---")
     st.subheader("🛠️ Field Parameters")
+    # Apply pending soil defaults from AI Assistant state change (before widgets render)
+    _pending = st.session_state.pop("_pending_soil_defaults", None)
+    if _pending:
+        st.session_state["n"]    = _pending.get("n",    st.session_state.get("n", 70))
+        st.session_state["p"]    = _pending.get("p",    st.session_state.get("p", 45))
+        st.session_state["k"]    = _pending.get("k",    st.session_state.get("k", 30))
+        st.session_state["rain"] = _pending.get("rain", st.session_state.get("rain", 500))
     y_area = st.number_input("Area (ha)", 1.0, 10000.0, key="y_area")
     n    = st.slider("Nitrogen (N)",   0, 140,  key="n")
     p_in = st.slider("Phosphorus (P)", 0, 145,  key="p")
@@ -1203,12 +1219,9 @@ elif page == "AI Assistant":
             _sc = sorted(df_yield[df_yield["state"] == _new_state]["crop"].unique())
             _best = get_best_crop_for_state(_new_state)
             st.session_state.y_crop = _best if _best else (_sc[0] if _sc else "")
-            defaults = STATE_SOIL_DEFAULTS.get(_new_state.lower().strip(), {})
-            if defaults:
-                st.session_state.n    = defaults["n"]
-                st.session_state.p    = defaults["p"]
-                st.session_state.k    = defaults["k"]
-                st.session_state.rain = defaults["rain"]
+            # Store soil defaults in a safe key — sidebar will apply on next rerun
+            # (Cannot set st.session_state.n/p/k/rain directly after widgets rendered)
+            st.session_state._pending_soil_defaults = STATE_SOIL_DEFAULTS.get(_new_state.lower().strip(), {})
             st.session_state.pop("chat_history", None)
             st.rerun()
 
