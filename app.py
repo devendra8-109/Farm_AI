@@ -449,6 +449,8 @@ def load_data():
                     df = pd.read_csv(path)
                     if not df.empty:
                         df.columns = df.columns.str.lower().str.strip()
+                        if 'state' in df.columns: df['state'] = df['state'].str.lower().str.strip()
+                        if 'crop' in df.columns: df['crop'] = df['crop'].str.lower().str.strip()
                         return df
         # Fallback: Return empty DF with expected columns to prevent KeyErrors
         return pd.DataFrame(columns=["state", "crop", "net_profit", "fertilizer_kg", "labour_hours", "seed_rate", "price_source"])
@@ -540,7 +542,7 @@ def render_sidebar_nav():
         
         for name, icon in PAGES:
             is_active = st.session_state.page == name
-            st.button(f"{icon} {name}", key=f"nav_{name}", use_container_width=True, 
+            st.button(f"{icon} {name}", key=f"nav_{name}", width='stretch', 
                          type="primary" if is_active else "secondary",
                          on_click=change_page, args=(name,))
 
@@ -805,11 +807,15 @@ with st.sidebar:
     # --- Selectors ---
     all_states_list = sorted(STATE_COORDS.keys())
     state_idx = all_states_list.index(st.session_state.y_state) if st.session_state.y_state in all_states_list else 0
-    y_state = st.selectbox("🗺️ Select State", all_states_list, index=state_idx, on_change=on_state_change, key="y_state_sel")
+    y_state = st.selectbox("🗺️ Select State", all_states_list, index=state_idx, 
+                           on_change=on_state_change, key="y_state_sel", 
+                           format_func=lambda x: str(x).title())
     
     state_crops = sorted(df_yield[df_yield["state"] == y_state]["crop"].unique())
     crop_idx = state_crops.index(st.session_state.y_crop) if st.session_state.y_crop in state_crops else 0
-    y_crop = st.selectbox("🌾 Select Crop", state_crops, index=crop_idx, on_change=on_crop_change, key="y_crop_sel")
+    y_crop = st.selectbox("🌾 Select Crop", state_crops, index=crop_idx, 
+                          on_change=on_crop_change, key="y_crop_sel",
+                          format_func=lambda x: str(x).title())
 
     # District Selection
     all_districts = ["All Districts"]
@@ -998,6 +1004,13 @@ if page == "Overview":
     
     # ── 0. DISCOVERY HOOK ──────────────────────────────────────────
     best_overall = get_best_crop_for_state(y_state)
+    _best_prof_k = 0
+    try:
+        _cdf = get_state_crop_comparison(y_state, n, p_in, k, rain)
+        if not _cdf.empty and 'Net Profit (₹K)' in _cdf.columns:
+            _best_prof_k = int(_cdf.iloc[0]['Net Profit (₹K)'])
+    except: pass
+
     st.markdown(f"""
     <div class="f-card f-card-primary" style="margin-bottom: 30px; padding: 30px; border-radius: 25px;">
         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1005,8 +1018,8 @@ if page == "Overview":
             <div>
                 <h2 style="margin: 0; color: white !important;">What should you grow?</h2>
                 <p style="margin: 5px 0 0 0; color: rgba(255,255,255,0.9) !important; font-size: 16px;">
-                    Based on current market trends in <b>{y_state}</b>, we recommend <b>{best_overall.title()}</b> 
-                    for a projected net profit of up to <b>₹{int(_comp_df.iloc[0]['Net Profit (₹K)']) if not (_comp_df := get_state_crop_comparison(y_state, n, p_in, k, rain)).empty and 'Net Profit (₹K)' in _comp_df.columns else 0}K</b> per hectare.
+                    Based on current market trends in <b>{y_state.title()}</b>, we recommend <b>{best_overall.title()}</b> 
+                    for a projected net profit of up to <b>₹{_best_prof_k:,}K</b> per hectare.
                 </p>
             </div>
         </div>
@@ -1437,6 +1450,10 @@ elif page == "AI Assistant":
         st.session_state.chat_history.append({"role": "assistant", "content": response})
         st.chat_message("assistant").write(response)
 
+# DELETE THE DUPLICATE BLOCK BELOW ENTIRELY
+elif page == "AI Assistant LEGACY": 
+    pass
+
 elif page == "Seasonal Calendar":
     render_header()
     st.markdown(f"### 🗓️ Seasonal Calendar — {y_crop.title()}")
@@ -1493,88 +1510,7 @@ elif page == "Seasonal Calendar":
         </div>
         """, unsafe_allow_html=True)
 
-elif page == "AI Assistant":
-    render_header()
-    st.markdown(f"### 🤖 FarmAI Assistant")
-    st.markdown("Ask me anything about your crops, prices, or how to improve your yield.")
-
-    if "messages" not in st.session_state:
-        st.session_state.messages = [
-            {"role": "assistant", "content": f"Hello! I'm your FarmAI Assistant. I see you're looking at **{y_crop.title()}** in **{y_state}**. How can I help you today?"}
-        ]
-
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-
-    if prompt := st.chat_input("e.g., Is it a good time to sell?"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        # Assistant Logic
-        response = ""
-        p_low = prompt.lower()
-        
-        # 1. Identify Crop Mention
-        all_known_crops = set(df_yield['crop'].unique()) | set(df_price['crop'].unique())
-        mentioned_crop = None
-        for c in all_known_crops:
-            if c.lower() in p_low:
-                mentioned_crop = c
-                break
-        
-        target_crop = mentioned_crop if mentioned_crop else y_crop
-        
-        # 2. Intent Detection
-        is_price  = any(k in p_low for k in ["price", "market", "rate", "cost", "value", "pric", "mandi"])
-        is_sell   = any(k in p_low for k in ["sell", "time", "when", "now"])
-        is_grow   = any(k in p_low for k in ["grow", "recommend", "best", "plant", "suitable"])
-        is_impact = any(k in p_low for k in ["why", "reason", "factor", "impact", "driver", "because"])
-        is_profit = any(k in p_low for k in ["profit", "money", "earn", "income"])
-
-        if is_price or is_sell:
-            price_crops_a = set(df_price['crop'].unique())
-            res_a = resolve_price_crop(target_crop, price_crops_a)
-            hist_a = df_price[df_price['crop'] == res_a].sort_values('date')
-            
-            if not hist_a.empty:
-                latest = hist_a['avg_modal_price'].iloc[-1]
-                avg = hist_a['avg_modal_price'].mean()
-                
-                if is_sell:
-                    if latest > avg:
-                        response = f"Current prices for **{target_crop.title()}** are at ₹{latest:,.0f}, which is above the historical average of ₹{avg:,.0f}. It looks like a **strong time to sell**."
-                    else:
-                        response = f"Prices for **{target_crop.title()}** are currently ₹{latest:,.0f}. They have been higher in the past (average ₹{avg:,.0f}). You might want to wait for a price surge if your storage allows."
-                else:
-                    response = f"The latest market price for **{target_crop.title()}** in our database is **₹{latest:,.0f} per quintal**. The historical average is ₹{avg:,.0f}."
-            else:
-                response = f"I don't have enough historical price data for **{target_crop.title()}** to give a specific rate, but I can tell you about its yield potential!"
-        
-        elif is_grow:
-            best_a = get_best_crop_for_state(y_state)
-            response = f"For **{y_state}**, I highly recommend growing **{best_a.title()}**. It currently shows the best balance of yield stability and market profit based on our ML models."
-        
-        elif is_impact:
-            labels_a = ["Rainfall", "Humidity", "Potassium (K)", "Phosphorus (P)", "Nitrogen (N)"]
-            response = f"Based on our AI analysis, **{labels_a[0]}** is the single most important factor affecting your **{target_crop.title()}** yield in this region. Focusing on water management is key."
-        
-        elif is_profit:
-            state_prof_a = df_profit[df_profit['state'].str.lower() == y_state.lower()]
-            crop_prof_a  = state_prof_a[state_prof_a['crop'].str.lower() == target_crop.lower()]
-            if not crop_prof_a.empty:
-                val_prof_a = crop_prof_a.iloc[0]['net_profit']
-                response = f"The estimated net profit for **{target_crop.title()}** is approximately **₹{val_prof_a/1000:,.1f}K** per hectare in {y_state}."
-            else:
-                response = f"I don't have exact profit projections for {target_crop.title()} in {y_state}, but typically it is a moderate-to-high value crop."
-        
-        else:
-            response = "I'm not quite sure how to answer that. Try asking about: 'What is the price of rice?', 'Should I sell my wheat?', or 'What should I grow?'"
-
-        with st.chat_message("assistant"):
-            st.markdown(response)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+# REMOVED DUPLICATE AI ASSISTANT BLOCK
 
 elif page == "Crop Recommendation":
     render_header()
@@ -1668,8 +1604,8 @@ elif page == "Price Forecast":
     
     if not hist.empty:
         c1, c2, c3 = st.columns(3)
-        with c1: st.metric("Latest Price", f"₹{hist['avg_modal_price'].iloc[-1]:,.0f}", "Modal Price")
-        with c2: st.metric("Historical High", f"₹{hist['avg_modal_price'].max():,.0f}")
+        with c1: st.metric("Market Price", f"₹{hist['avg_modal_price'].iloc[-1]:,.0f}", help="Current average modal price per quintal")
+        with c2: st.metric("Historical Peak", f"₹{hist['avg_modal_price'].max():,.0f}")
         with c3: st.metric("Historical Low", f"₹{hist['avg_modal_price'].min():,.0f}")
         
         st.markdown('<div class="f-card">', unsafe_allow_html=True)
